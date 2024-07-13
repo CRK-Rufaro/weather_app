@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:open_weather_example_flutter/src/api/api.dart';
 import 'package:open_weather_example_flutter/src/features/weather/application/providers.dart';
+import 'package:open_weather_example_flutter/src/features/weather/data/forecast_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_data.dart';
 
 class HttpWeatherRepository{
@@ -21,17 +22,6 @@ class HttpWeatherRepository{
     throw Exception('Failed to retrieve weather data');
    }
   }
-  
-  // Future<WeatherData> getWeather({required String city}) async {
-  //   final response = await client.get(api.weatherUrl(city: city));
-
-  //   if (response.statusCode == 200) {
-  //     final json = jsonDecode(response.body);
-  //     return WeatherData.fromJson(json);
-  //   } else {
-  //     throw Exception('Failed to load weather data');
-  //   }
-  // }
 
   getForecast({required String city}) async{
     final response = await client.get(api.forecast(city));
