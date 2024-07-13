@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:open_weather_example_flutter/src/features/weather/application/providers.dart';
+import 'package:open_weather_example_flutter/src/features/weather/data/weather_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/presentation/weather_icon_image.dart';
 import 'package:provider/provider.dart';
+
 
 class CurrentWeather extends StatelessWidget {
   const CurrentWeather({super.key});

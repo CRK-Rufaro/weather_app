@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:open_weather_example_flutter/src/api/api.dart';
 import 'package:open_weather_example_flutter/src/api/api_keys.dart';
+import 'package:open_weather_example_flutter/src/features/weather/data/forecast_data.dart';
+import 'package:open_weather_example_flutter/src/features/weather/data/weather_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_repository.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,6 +20,7 @@ class WeatherProvider extends ChangeNotifier {
   Future<void> getWeatherData() async {
     final weather = await repository.getWeather(city: city);
     //TODO set the weather and fetch forecast after
+    currentWeatherProvider = weather;
   }
 
   Future<void> getForecastData() async {
@@ -24,3 +28,7 @@ class WeatherProvider extends ChangeNotifier {
     //TODO set the forecast
   }
 }
+
+
+
+

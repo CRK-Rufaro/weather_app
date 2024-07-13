@@ -3,8 +3,10 @@ import 'package:open_weather_example_flutter/src/api/api_keys.dart';
 import 'package:open_weather_example_flutter/src/features/weather/application/providers.dart';
 import 'package:open_weather_example_flutter/src/features/weather/presentation/weather_page.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async{
+  await dotenv.load(fileName: ".env");
   setupInjection();
   runApp(const MyApp());
 }
