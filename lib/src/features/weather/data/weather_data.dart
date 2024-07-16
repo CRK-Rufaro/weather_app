@@ -18,15 +18,15 @@ class WeatherData {
 
 
   factory WeatherData.fromJson (Map<String,dynamic> json){
-    double currTime = json["list"]["dt"];
-    double sunsetTime = json["list"]["sunset"];
+    // double currTime = json["list"]["dt"];
+    // double sunsetTime = json["list"]["sunset"];
 
   return WeatherData(
     temp: Temperature(defaultTemperature: json["main"]["temp"]),
     minTemp: Temperature(defaultTemperature:json["main"]["temp_min"]),
     maxTemp: Temperature(defaultTemperature:json["main"]["temp_max"]),
-    weatherInfo: json["weather"],
-    iconUrl: "https://openweathermap.org/img/wn/${json["weather"]["icon"]}.png",
+    weatherInfo: json["weather"][0],
+    iconUrl: "https://openweathermap.org/img/wn/${json["weather"][0]["icon"]}.png",
   );
   }
 
@@ -39,5 +39,7 @@ class Temperature{
   Temperature({required this.defaultTemperature});
   double get celsius => defaultTemperature;
   double get farenheight => defaultTemperature*9/5 + 32;
+
+
   
 }

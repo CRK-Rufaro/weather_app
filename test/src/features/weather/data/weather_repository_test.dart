@@ -1,10 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:open_weather_example_flutter/src/api/api.dart';
+import 'package:open_weather_example_flutter/src/api/geocoding_api.dart';
+import 'package:open_weather_example_flutter/src/features/weather/data/city_data.dart';
+import 'package:open_weather_example_flutter/src/features/weather/data/weather_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_repository.dart';
 
-class MockHttpClient extends Mock implements http.Client {}
+class MockHttpClient extends Mock implements http.Client {
+  // @override
+  // Future<Response> get(Uri url, {Map<String, String>? headers}){
+  //   return 
+  // }
+}
 
 const encodedWeatherJsonResponse = """
 {
@@ -53,32 +62,74 @@ const encodedWeatherJsonResponse = """
   }  
 """;
 
-final expectedWeatherFromJson = Weather(
-  weatherParams: WeatherParams(temp: 282.55, tempMin: 280.37, tempMax: 284.26),
-  weatherInfo: [
-    WeatherInfo(
-      description: 'clear sky',
-      icon: '01d',
-      main: 'Clear',
-    )
-  ],
-  dt: 1560350645,
-);
+// final expectedWeatherFromJson = Weather(
+//   weatherParams: WeatherParams(temp: 282.55, tempMin: 280.37, tempMax: 284.26),
+//   weatherInfo: [
+//     WeatherInfo(
+//       description: 'clear sky',
+//       icon: '01d',
+//       main: 'Clear',
+//     )
+//   ],
+//   dt: 1560350645,
+// );
 
 void main() {
   test('repository with mocked http client, success', () async {
+    final mockCityData = CityData(name: "London", latitude: 51.5073219, longitude: -0.1276474, country: "GB");
     final mockHttpClient = MockHttpClient();
     final api = OpenWeatherMapAPI('apiKey');
     final weatherRepository = HttpWeatherRepository(api: api, client: mockHttpClient);
     //TODO Mock http and ensure weather is correct
+
+    
+    // test("tests", (){
+    // WeatherData result = weatherRepository.getWeather(city: mockCityData);
+    // })
   });
 
   test('repository with mocked http client, failure', () async {
     final mockHttpClient = MockHttpClient();
     final api = OpenWeatherMapAPI('apiKey');
-    final weatherRepository = HttpWeatherRepository(api: api, client: mockHttpClient);
+    //final weatherRepository = HttpWeatherRepository(api: api, client: mockHttpClient);
     //TODO Mock http 404 and ensure api returns CityNotFoundException
   });
 
   //TODO test providers data as well
+
+
+
+}
+
+class MockHttpWeatherRepository implements HttpWeatherRepository{
+  @override
+  // TODO: implement api
+  OpenWeatherMapAPI get api => throw UnimplementedError();
+
+  @override
+  // TODO: implement client
+  http.Client get client => throw UnimplementedError();
+
+  @override
+  // TODO: implement geoApi
+  GeocodingAPI get geoApi => throw UnimplementedError();
+
+  @override
+  Future<CityData> getCity({required String city}) {
+    // TODO: implement getCity
+    throw UnimplementedError();
+  }
+
+  @override
+  getForecast({required CityData city}) {
+    // TODO: implement getForecast
+    throw UnimplementedError();
+  }
+
+  @override
+  getWeather({required CityData city}) {
+    // TODO: implement getWeather
+    throw UnimplementedError();
+  }
+
 }

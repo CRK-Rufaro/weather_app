@@ -1,3 +1,5 @@
+import 'package:open_weather_example_flutter/src/features/weather/data/city_data.dart';
+
 /// Uri builder class for the OpenWeatherMap API
 class OpenWeatherMapAPI {
   OpenWeatherMapAPI(this.apiKey);
@@ -7,12 +9,12 @@ class OpenWeatherMapAPI {
   static const String _apiBaseUrl = "api.openweathermap.org";
   static const String _apiPath = "/data/2.5/";
 
-  Uri weather(String city) => _buildUri(
+  Uri weather(CityData city) => _buildUri(
         endpoint: "weather",
         parametersBuilder: () => cityQueryParameters(city),
       );
 
-  Uri forecast(String city) => _buildUri(
+  Uri forecast(CityData city) => _buildUri(
         endpoint: "forecast",
         parametersBuilder: () => cityQueryParameters(city),
       );
@@ -29,8 +31,10 @@ class OpenWeatherMapAPI {
     );
   }
 
-  Map<String, dynamic> cityQueryParameters(String city) => {
-        "q": city,
+  Map<String, dynamic> cityQueryParameters(CityData city) => {
+        //"q": city,
+        "lat":city.latitude,
+        "lon":city.longitude,
         "appid": apiKey,
         "units": "metric",
         "type": "like",

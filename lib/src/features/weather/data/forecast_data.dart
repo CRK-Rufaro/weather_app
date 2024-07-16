@@ -8,13 +8,14 @@ class ForecastData {
   factory ForecastData.fromJson (Map<String,dynamic> json){
     // double currTime = json["list"]["dt"];
     // double sunsetTime = json["list"]["sunset"];
-  List<WeatherData> retrievedforecastdata = (json["list"] as List).map((day)=>
+    //print(json["list"] as List);
+  List<WeatherData> retrievedforecastdata = (json["list"] as List).map((timeStep)=> //3 hour intervals
   WeatherData(
-    temp: Temperature(defaultTemperature: day["temp"]["day"]),
-    minTemp: Temperature(defaultTemperature:day["temp"]["min"]),
-    maxTemp: Temperature(defaultTemperature:day["temp"]["max"]),
-    weatherInfo: day["weather"],
-    iconUrl: "https://openweathermap.org/img/wn/${day["weather"]["icon"]}.png",
+    temp: Temperature(defaultTemperature: timeStep["main"]["temp"]),
+    minTemp: Temperature(defaultTemperature:timeStep["main"]["temp_min"]),
+    maxTemp: Temperature(defaultTemperature:timeStep["main"]["temp_max"]),
+    weatherInfo: timeStep["weather"][0],
+    iconUrl: "https://openweathermap.org/img/wn/${timeStep["weather"][0]["icon"]}.png",
   )
   ).toList();
 

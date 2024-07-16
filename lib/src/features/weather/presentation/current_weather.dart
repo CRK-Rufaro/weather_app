@@ -10,17 +10,35 @@ class CurrentWeather extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<WeatherProvider, (String city, WeatherData? weatherData)>(
-        selector: (context, provider) => (provider.city, provider.currentWeatherProvider),
+    
+    return Selector<WeatherProvider, (String city, WeatherData? weatherData, bool isLoading)>(
+        selector: (context, provider) => (provider.city, provider.currentWeatherProvider,provider.isLoading),
         builder: (context, data, _) {
+          // if(data.$2==null){
+          // //print("there might be a problem");
+          //   if(data.$3==true){
+          //   return const CircularProgressIndicator();
+          // }
+          // }
+          if(data.$2!=null){
+            if(data.$3==true){
+            return const CircularProgressIndicator();
+          }
+          if(data.$3==false){
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(data.$1, style: Theme.of(context).textTheme.headlineMedium),
+
               //TODO account for null, errors and loading states
-              CurrentWeatherContents(data: data.$2),
+              //if data.$2!=null{}
+              CurrentWeatherContents(data: data.$2!),
             ],
-          );
+          );}
+          }
+          return const CircularProgressIndicator();
+
+          
         });
   }
 }

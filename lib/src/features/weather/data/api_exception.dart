@@ -19,3 +19,7 @@ class CityNotFoundException extends APIException {
 class UnknownException implements Exception {
   UnknownException();
 }
+//added below
+class CustomException extends APIException {
+  CustomException(super.message);
+}

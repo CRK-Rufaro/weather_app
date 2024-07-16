@@ -58,7 +58,7 @@ class _CitySearchRowState extends State<CitySearchBox> {
                 ),
               ),
               onTap: () {
-                FocusScope.of(context).unfocus();
+                FocusScope.of(context).unfocus();         
                 context.read<WeatherProvider>().city = _searchController.text;
                 //TODO search weather
               },
