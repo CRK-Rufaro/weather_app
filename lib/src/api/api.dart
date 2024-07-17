@@ -33,8 +33,8 @@ class OpenWeatherMapAPI {
 
   Map<String, dynamic> cityQueryParameters(CityData city) => {
         //"q": city,
-        "lat":city.latitude,
-        "lon":city.longitude,
+        "lat":city.latitude.toString(),
+        "lon":city.longitude.toString(),
         "appid": apiKey,
         "units": "metric",
         "type": "like",

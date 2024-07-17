@@ -21,9 +21,9 @@ class WeatherProvider extends ChangeNotifier {
   // }
 
   String city = 'London'; 
+
   //// edited directly from search box
-  //new api should plug in here
-  CityData? currentCityData;
+  //CityData? currentCityData;
 
 
   
@@ -38,18 +38,18 @@ class WeatherProvider extends ChangeNotifier {
 
   
 
-  Future<void> getCityData() async{
-    final cityData = await repository.getCity(city: city);
-    currentCityData = cityData;
-  }
+  // Future<void> getCityData() async{
+  //   final cityData = await repository.getCity(city: city);
+  //   currentCityData = cityData;
+  // }
 
   Future<void> getWeatherData() async {
     isLoading = true;
     notifyListeners();
 
-    getCityData();//updating city variable
+    //getCityData();//updating city variable
 
-    final weather = await repository.getWeather(city: currentCityData!);
+    final weather = await repository.getWeather(city: city);
     //TODO set the weather and fetch forecast after
     currentWeatherProvider = weather;
     getForecastData();
@@ -57,7 +57,7 @@ class WeatherProvider extends ChangeNotifier {
   }
 
   Future<void> getForecastData() async {
-    final forecast = await repository.getForecast(city: currentCityData!);
+    final forecast = await repository.getForecast(city: city);
     //TODO set the forecast
     hourlyWeatherProvider = forecast;
     
