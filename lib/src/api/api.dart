@@ -41,3 +41,4 @@ class OpenWeatherMapAPI {
         "cnt": "30",
       };
 }
+

@@ -121,19 +121,28 @@ final expectedWeatherFromJson = WeatherData(temp: Temperature(defaultTemperature
 
 
 void main() {
+    late MockHttpClient mockHttpClient;
+    late OpenWeatherMapAPI api;
+    late GeocodingAPI geoApi;
+    late HttpWeatherRepository weatherRepository;
+
   setUpAll(() {
     // Registering fallback values for Uri
     registerFallbackValue(UriFake());
   });
 
+  //Initialising variables
+  setUp((){
+    mockHttpClient = MockHttpClient();
+    api = OpenWeatherMapAPI('apiKey');
+    geoApi = GeocodingAPI('apiKey');
+    weatherRepository = HttpWeatherRepository(api: api, client: mockHttpClient, geoApi: geoApi);
+  });
 
-  test('repository with mocked http client, success', () async {
-    final mockHttpClient = MockHttpClient();
-    final api = OpenWeatherMapAPI('apiKey');
-    final geoApi = GeocodingAPI('apiKey');
-    final weatherRepository = HttpWeatherRepository(api: api, client: mockHttpClient, geoApi: geoApi);
+    //Grouping to reduce duplication
+    group("Testing Http Repository", (){
+    test('repository with mocked http client, success', () async {
     //TODO Mock http and ensure weather is correct
-    
     when(() => mockHttpClient.get(any(that: isA<Uri>())))
         .thenAnswer((invocation) async {
       final uri = invocation.positionalArguments[0] as Uri;
@@ -156,18 +165,38 @@ void main() {
     expect(result.weatherInfo, expectedWeatherFromJson.weatherInfo);
   });
 
-  test('repository with mocked http client, failure', () async {
-    final mockHttpClient = MockHttpClient();
-    final api = OpenWeatherMapAPI('apiKey');
-    final geoApi = GeocodingAPI('apiKey');
-    final weatherRepository = HttpWeatherRepository(api: api, client: mockHttpClient,geoApi: geoApi);
-    //TODO Mock http 404 and ensure api returns CityNotFoundException
+    test('repository with mocked http client, failure', () async {
+  //TODO Mock http 404 and ensure api returns CityNotFoundException
 
     when(() => mockHttpClient.get(any())).thenAnswer((_) async => Response('', 404)); 
     expect(()=> weatherRepository.getWeather(city: "Mountain View"), throwsA (isA<CityNotFoundException>()));
   });
 
-  //TODO test providers data as well
+  // //network errors
+  //     test('repository with mocked http client, network timeout', () async {
+  //     // Mock HTTP client response for network timeout
+  //     when(() => mockHttpClient.get(any())).thenThrow(SocketException('Network timeout'));
+
+  //     // Expect the repository to throw a network-related exception
+  //     expect(() => weatherRepository.getWeather(city: "Mountain View"), throwsA(isA<SocketException>()));
+  //   });
+
+  //   test('repository with mocked http client, DNS failure', () async {
+  //     // Mock HTTP client response for DNS failure
+  //     when(() => mockHttpClient.get(any())).thenThrow(SocketException('Failed host lookup'));
+
+  //     // Expect the repository to throw a network-related exception
+  //     expect(() => weatherRepository.getWeather(city: "Mountain View"), throwsA(isA<SocketException>()));
+  //   });
+
+
+  });
+
+    //TODO test providers data as well
+    group("Testing Weather Provider", (){
+      
+    });
+  
 
 
 
