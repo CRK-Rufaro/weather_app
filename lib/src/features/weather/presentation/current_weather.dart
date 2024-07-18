@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 class CurrentWeather extends StatelessWidget {
   const CurrentWeather({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     
@@ -20,6 +20,7 @@ class CurrentWeather extends StatelessWidget {
           //   return const CircularProgressIndicator();
           // }
           // }
+
           if(data.$2!=null){
             if(data.$3==true){
             return const CircularProgressIndicator();
@@ -37,8 +38,6 @@ class CurrentWeather extends StatelessWidget {
           );}
           }
           return const CircularProgressIndicator();
-
-          
         });
   }
 }
@@ -47,6 +46,7 @@ class CurrentWeatherContents extends StatelessWidget {
   const CurrentWeatherContents({super.key, required this.data});
 
   final WeatherData data;
+  
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart';
 import 'package:open_weather_example_flutter/src/api/api.dart';
 import 'package:open_weather_example_flutter/src/api/geocoding_api.dart';
@@ -13,8 +15,10 @@ class HttpWeatherRepository{
   final GeocodingAPI geoApi;
 
   HttpWeatherRepository({required this.api, required this.client, required this.geoApi});
+    
 
   getWeather({required String city}) async{
+
     //Pseudo auto_Geo_Locating
     //print("calling get weather");
     //Pseudo auto_Geo_Locating
@@ -24,8 +28,7 @@ class HttpWeatherRepository{
     // print("retrieving weather data");
    final response = await client.get(api.weather(cityResponse));
    //print(response.body);
-    if(response.statusCode != 503){
-      if(response.statusCode!=403){
+      if(response.statusCode!=403 && response.statusCode!=401){
         if(response.statusCode!=404){
           if(response.statusCode == 200){
             //success
@@ -39,15 +42,14 @@ class HttpWeatherRepository{
       }
       throw InvalidApiKeyException();
     }
-    throw NoInternetConnectionException();
-  }
+
 
   getForecast({required String city}) async{
+
         //Pseudo auto_Geo_Locating
     final cityResponse = await getCity(city: city);
     final response = await client.get(api.forecast(cityResponse));
-    if(response.statusCode != 503){
-      if(response.statusCode!=403){
+      if(response.statusCode!=403&& response.statusCode!=401){
         if(response.statusCode!=404){
           if(response.statusCode == 200){
             //success
@@ -61,15 +63,13 @@ class HttpWeatherRepository{
       }
       throw InvalidApiKeyException();
     }
-    throw NoInternetConnectionException();
-  }
 
    Future<CityData> getCity({required String city}) async{
+
     //print("calling geolocator");
     final response = await client.get(geoApi.directGeocoding(city));  
 
-    if(response.statusCode != 503){
-      if(response.statusCode!=403){
+      if(response.statusCode!=403&&response.statusCode!=401){
         if(response.statusCode!=404){
           if(response.statusCode == 200){
           //success
@@ -89,7 +89,6 @@ class HttpWeatherRepository{
       }
       throw InvalidApiKeyException();
   }
-  throw NoInternetConnectionException();
-
-   }
+  
+  
 }

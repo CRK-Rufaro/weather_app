@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -121,6 +123,7 @@ final expectedWeatherFromJson = WeatherData(temp: Temperature(defaultTemperature
 
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
     late MockHttpClient mockHttpClient;
     late OpenWeatherMapAPI api;
     late GeocodingAPI geoApi;
@@ -172,23 +175,14 @@ void main() {
     expect(()=> weatherRepository.getWeather(city: "Mountain View"), throwsA (isA<CityNotFoundException>()));
   });
 
-  // //network errors
-  //     test('repository with mocked http client, network timeout', () async {
-  //     // Mock HTTP client response for network timeout
-  //     when(() => mockHttpClient.get(any())).thenThrow(SocketException('Network timeout'));
+  //network errors
+      test('repository with mocked http client, network timeout', () async {
+      // Mock HTTP client response for network timeout
+      when(() => mockHttpClient.get(any())).thenAnswer((_)async=>Response('', 403));
 
-  //     // Expect the repository to throw a network-related exception
-  //     expect(() => weatherRepository.getWeather(city: "Mountain View"), throwsA(isA<SocketException>()));
-  //   });
-
-  //   test('repository with mocked http client, DNS failure', () async {
-  //     // Mock HTTP client response for DNS failure
-  //     when(() => mockHttpClient.get(any())).thenThrow(SocketException('Failed host lookup'));
-
-  //     // Expect the repository to throw a network-related exception
-  //     expect(() => weatherRepository.getWeather(city: "Mountain View"), throwsA(isA<SocketException>()));
-  //   });
-
+      // Expect the repository to throw a network-related exception
+      expect(() => weatherRepository.getWeather(city: "Mountain View"), throwsA(isA<InvalidApiKeyException>()));
+      });
 
   });
 

@@ -20,6 +20,7 @@ class WeatherProvider extends ChangeNotifier {
   //   currentCityData = await repository.getCity(city: city);
   // }
 
+
   String city = 'London'; 
 
   //// edited directly from search box
