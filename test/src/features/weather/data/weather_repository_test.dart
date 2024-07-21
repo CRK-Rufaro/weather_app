@@ -1,17 +1,25 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:open_weather_example_flutter/src/api/api.dart';
 import 'package:open_weather_example_flutter/src/api/geocoding_api.dart';
+import 'package:open_weather_example_flutter/src/features/weather/application/providers.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/api_exception.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/city_data.dart';
+import 'package:open_weather_example_flutter/src/features/weather/data/forecast_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_repository.dart';
 
 class MockHttpClient extends Mock implements http.Client {
+}
+
+class MockHttpWeatherRepository extends Mock implements HttpWeatherRepository{
+
 }
 
 //Registering fake classes for Uri
@@ -123,7 +131,7 @@ final expectedWeatherFromJson = WeatherData(temp: Temperature(defaultTemperature
 
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
+    //TestWidgetsFlutterBinding.ensureInitialized();
     late MockHttpClient mockHttpClient;
     late OpenWeatherMapAPI api;
     late GeocodingAPI geoApi;
@@ -176,21 +184,131 @@ void main() {
   });
 
   //network errors
-      test('repository with mocked http client, network timeout', () async {
-      // Mock HTTP client response for network timeout
+      test('repository with mocked http client, Invalid API', () async {
+      // Mock HTTP client response for Invalid Api
       when(() => mockHttpClient.get(any())).thenAnswer((_)async=>Response('', 403));
-
-      // Expect the repository to throw a network-related exception
       expect(() => weatherRepository.getWeather(city: "Mountain View"), throwsA(isA<InvalidApiKeyException>()));
       });
 
   });
 
     //TODO test providers data as well
-    group("Testing Weather Provider", (){
-      
+group('WeatherProvider', () {
+    late WeatherProvider weatherProvider;
+    late MockHttpWeatherRepository mockWeatherRepository;
+    final getIt = GetIt.instance;
+
+          final WeatherData weatherData = expectedWeatherFromJson;
+
+          List<WeatherData> weatherDataList = [];
+WeatherData one = WeatherData(temp: Temperature(defaultTemperature: 296.76), minTemp: Temperature(defaultTemperature: 296.76), maxTemp: Temperature(defaultTemperature: 297.87), 
+  weatherInfo: {
+      "id": 500,
+      "main": "Rain",
+      "description": "light rain",
+      "icon": "10d"
+    }, iconUrl: "https://openweathermap.org/img/wn/10d.png");
+
+WeatherData two = WeatherData(temp: Temperature(defaultTemperature: 295.45), minTemp: Temperature(defaultTemperature: 292.84), maxTemp: Temperature(defaultTemperature: 295.45), 
+  weatherInfo: {
+      "id": 500,
+      "main": "Rain",
+      "description": "light rain",
+      "icon": "10n"
+    }, iconUrl: "https://openweathermap.org/img/wn/10n.png");
+
+WeatherData three = WeatherData(temp: Temperature(defaultTemperature: 292.46), minTemp: Temperature(defaultTemperature: 290.31), maxTemp: Temperature(defaultTemperature: 292.46), 
+  weatherInfo: {
+      "id": 500,
+      "main": "Rain",
+      "description": "light rain",
+      "icon": "10n"
+    }, iconUrl: "https://openweathermap.org/img/wn/10n.png");
+
+WeatherData four = WeatherData(temp: Temperature(defaultTemperature: 294.93), minTemp: Temperature(defaultTemperature: 294.93), maxTemp: Temperature(defaultTemperature: 294.93), 
+  weatherInfo: {
+      "id": 804,
+      "main": "Clouds",
+      "description": "overcast clouds",
+      "icon": "04d"
+    }, iconUrl: "https://openweathermap.org/img/wn/04d.png");
+
+weatherDataList.addAll([one,two,three,four]);
+
+      final forecastData = ForecastData(
+        forecast: weatherDataList
+      );
+
+    // mockWeatherRepository = HttpWeatherRepository(
+    //   api: mockOpenWeatherMapAPI,
+    //   client: mockClient,
+    //   geoApi: mockGeocodingAPI,
+    // );
+
+    setUp(() {
+      getIt.registerSingleton<String>('test_api_key', instanceName: 'api_key');
+      mockWeatherRepository = MockHttpWeatherRepository();
+      weatherProvider = WeatherProvider();
+      weatherProvider.repository = mockWeatherRepository;
     });
-  
+    
+    tearDown(() {
+    // Reset GetIt after each test to avoid side effects
+    getIt.reset();
+  });
+
+
+
+
+    test('should fetch weather data successfully', () async {
+
+      
+
+      when(() => mockWeatherRepository.getWeather(city: 'Mountain View')).thenAnswer((_) async => weatherData);
+      when(() => mockWeatherRepository.getForecast(city: 'Mountain View')).thenAnswer((_) async => forecastData);
+
+      weatherProvider.city = "Mountain View";
+      await weatherProvider.getWeatherData();
+      //await weatherProvider.getForecastData();
+
+      expect(weatherProvider.currentWeatherProvider, weatherData);
+      expect(weatherProvider.hourlyWeatherProvider, forecastData);
+      expect(weatherProvider.isLoading, false);
+    });
+
+    test('should handle loading state', () async {
+      when(() => mockWeatherRepository.getWeather(city: 'Mountain View')).thenAnswer((_) async {
+        await Future.delayed(Duration(milliseconds: 500));
+        return weatherData;
+      });
+      when(() => mockWeatherRepository.getForecast(city: 'Mountain View')).thenAnswer((_) async {
+        await Future.delayed(Duration(seconds: 1));
+        return forecastData;
+      } );
+      weatherProvider.city = "Mountain View";
+      final future = weatherProvider.getWeatherData();
+
+      expect(weatherProvider.isLoading, true);
+
+      await future;
+
+      expect(weatherProvider.isLoading, false);
+    });
+
+    test('should handle error state', () async {
+      when(() => mockWeatherRepository.getWeather(city: 'Mountain View')).thenThrow(UnknownException());
+      //when(() => mockWeatherRepository.getForecast(city: 'Mountain View')).thenAnswer((_) async => forecastData);
+      weatherProvider.city = "Mountain View";
+      expect(()=> weatherProvider.getWeatherData(), throwsA (isA<UnknownException>()));
+      try {
+        await weatherProvider.getWeatherData();        
+      } catch (e) {
+        expect(weatherProvider.currentWeatherProvider, null);
+        expect(weatherProvider.hourlyWeatherProvider, null);
+        expect(weatherProvider.isLoading, false);
+      }
+    });
+  });
 
 
 

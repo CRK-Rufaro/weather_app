@@ -4,7 +4,7 @@ class GeocodingAPI{
   final String apiKey;
 
   static const String _apiBaseUrl = "api.openweathermap.org";
-  static const String _apiPath = "/geo/1.0";
+  static const String _apiPath = "/geo/1.0/";
 
   //for direct geocoding
   Uri directGeocoding(String city) => _buildUri(

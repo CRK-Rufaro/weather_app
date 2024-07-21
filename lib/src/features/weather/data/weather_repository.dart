@@ -66,20 +66,24 @@ class HttpWeatherRepository{
 
    Future<CityData> getCity({required String city}) async{
 
-    //print("calling geolocator");
+    print("calling geolocator");
     final response = await client.get(geoApi.directGeocoding(city));  
 
       if(response.statusCode!=403&&response.statusCode!=401){
         if(response.statusCode!=404){
           if(response.statusCode == 200){
           //success
+          print("geo locating sucesss");
+          //print(response.body);
           List<dynamic> dataList = jsonDecode(response.body); //jsonArray passed into jsonDecode -> List<dynamic> is returned
+          //print(dataList[0]["lat"]);
           if(dataList.isEmpty){
             //Connection confirmed, Api Valid but there is no result in response
             throw CityNotFoundException();
           }
           List<Map<String,dynamic>> newList = [];
           newList =  (dataList.map((subMap)=>subMap as Map<String,dynamic>)).toList();
+          //print("Successfully found and returned coordinates");
           return CityData.fromJson(newList);
          }
          //Connection confirmed, Api Valid, Fails with some other error

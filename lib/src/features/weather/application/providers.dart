@@ -45,22 +45,44 @@ class WeatherProvider extends ChangeNotifier {
   // }
 
   Future<void> getWeatherData() async {
+    print("attempting to get weather");
+    print("Value of city is : ${city}");
     isLoading = true;
     notifyListeners();
 
     //getCityData();//updating city variable
+    final WeatherData weather;
+    try {
+      weather = await repository.getWeather(city: city);
+    } catch (e) {
+      isLoading = false;
+      rethrow;
 
-    final weather = await repository.getWeather(city: city);
+    }
+
+     
+    //print(weather.weatherInfo);
     //TODO set the weather and fetch forecast after
     currentWeatherProvider = weather;
-    getForecastData();
+    await getForecastData();
 
   }
 
   Future<void> getForecastData() async {
-    final forecast = await repository.getForecast(city: city);
+    // print("Attemping to get forecast");
+    // print("Value of city is: ${city}");
+    final ForecastData forecast;
+    try {
+      forecast = await repository.getForecast(city: city);
+    } catch (e) {
+      isLoading = false;
+      rethrow;
+    }
+     
+    
     //TODO set the forecast
     hourlyWeatherProvider = forecast;
+    print("Forecast Successfully fetched");
     
     isLoading = false;
     notifyListeners();

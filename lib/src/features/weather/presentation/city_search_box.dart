@@ -37,8 +37,15 @@ class _CitySearchRowState extends State<CitySearchBox> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Expanded(
+            Expanded(
               child: TextField(
+                controller: _searchController,
+              
+          decoration: const InputDecoration(
+            labelText: 'Enter city name',
+            
+          ),
+
                 //TODO make component functional and add style
               ),
             ),
@@ -61,6 +68,8 @@ class _CitySearchRowState extends State<CitySearchBox> {
                 FocusScope.of(context).unfocus();         
                 context.read<WeatherProvider>().city = _searchController.text;
                 //TODO search weather
+                print("Value passed into provider is: ${context.read<WeatherProvider>().city}");
+                context.read<WeatherProvider>().getWeatherData();
               },
             )
           ],
