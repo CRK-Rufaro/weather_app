@@ -38,7 +38,7 @@ class OpenWeatherMapAPI {
         "appid": apiKey,
         "units": "metric",
         "type": "like",
-        "cnt": "30",
+        //"cnt": "30",
       };
 }
 

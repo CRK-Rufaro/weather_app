@@ -56,7 +56,7 @@ void main(){
 
   Map<String,dynamic> mockedJson = jsonDecode(encodedWeatherJsonResponse) as Map<String,dynamic>;
 
-  WeatherData matcher = WeatherData(temp: Temperature(defaultTemperature: 282.55), minTemp: Temperature(defaultTemperature: 280.37), maxTemp: Temperature(defaultTemperature: 284.26), 
+  WeatherData matcher = WeatherData(dtSunset: DateTime.fromMillisecondsSinceEpoch(1560396563*1000,isUtc:true), dtCurrent: DateTime.fromMillisecondsSinceEpoch(1560350645*1000,isUtc:true),temp: Temperature(defaultTemperature: 282.55), minTemp: Temperature(defaultTemperature: 280.37), maxTemp: Temperature(defaultTemperature: 284.26), 
   weatherInfo: {
       "id": 800,
       "main": "Clear",
@@ -78,5 +78,7 @@ void main(){
         expect(sut.maxTemp.farenheight, matcher.maxTemp.farenheight);
         expect(sut.weatherInfo, matcher.weatherInfo);
         expect(sut.iconUrl, matcher.iconUrl);
+        expect(sut.dtCurrent, matcher.dtCurrent);
+        expect(sut.dtSunset, matcher.dtSunset);
     });
 }

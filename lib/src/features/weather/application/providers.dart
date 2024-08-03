@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:open_weather_example_flutter/src/api/api.dart';
 import 'package:open_weather_example_flutter/src/api/api_keys.dart';
 import 'package:open_weather_example_flutter/src/api/geocoding_api.dart';
-import 'package:open_weather_example_flutter/src/features/weather/data/city_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/forecast_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_repository.dart';
@@ -45,16 +44,28 @@ class WeatherProvider extends ChangeNotifier {
   // }
 
   Future<void> getWeatherData() async {
-    print("attempting to get weather");
-    print("Value of city is : ${city}");
+    if (kDebugMode) {
+      print("attempting to get weather");
+      print("Value of city is : $city");
+    }
+   
     isLoading = true;
     notifyListeners();
+    if (kDebugMode) {
+      print("Notified listeners");
+    }
 
     //getCityData();//updating city variable
     final WeatherData weather;
+    String vCity;
     try {
-      weather = await repository.getWeather(city: city);
+      (weather,vCity) = await repository.getWeather(city: city);
+      city = vCity;
+      
     } catch (e) {
+      if (kDebugMode) {
+        print("Exeption found attempting to get weather from provider class");
+      }
       isLoading = false;
       rethrow;
 
@@ -65,6 +76,8 @@ class WeatherProvider extends ChangeNotifier {
     //TODO set the weather and fetch forecast after
     currentWeatherProvider = weather;
     await getForecastData();
+    //isLoading = false;
+    
 
   }
 
@@ -82,7 +95,10 @@ class WeatherProvider extends ChangeNotifier {
     
     //TODO set the forecast
     hourlyWeatherProvider = forecast;
-    print("Forecast Successfully fetched");
+    
+    if (kDebugMode) {
+      print("Forecast Successfully fetched");
+    }
     
     isLoading = false;
     notifyListeners();

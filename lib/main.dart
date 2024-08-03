@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   setupInjection();
   runApp(const MyApp());
@@ -47,7 +48,8 @@ class MyApp extends StatelessWidget {
           ],
           builder: (context, _) {
             return const WeatherPage(city: 'London');
-          }),
+          },
+          ),
     );
   }
 }

@@ -9,11 +9,24 @@ class ForecastData {
     // double currTime = json["list"]["dt"];
     // double sunsetTime = json["list"]["sunset"];
     //print(json["list"] as List);
+      double safeConvert(dynamic value) {
+        if (value is int) {
+          return value.toDouble();
+        } else if (value is double) {
+          return value;
+        } else {
+          throw Exception('Unexpected type for value: $value');
+        }
+      }
+
+  final sunsetTime = json["city"]["sunset"];
   List<WeatherData> retrievedforecastdata = (json["list"] as List).map((timeStep)=> //3 hour intervals
   WeatherData(
-    temp: Temperature(defaultTemperature: timeStep["main"]["temp"]),
-    minTemp: Temperature(defaultTemperature:timeStep["main"]["temp_min"]),
-    maxTemp: Temperature(defaultTemperature:timeStep["main"]["temp_max"]),
+    dtCurrent: DateTime.fromMillisecondsSinceEpoch(timeStep["dt"]*1000,isUtc: true) ,
+    dtSunset:  DateTime.fromMillisecondsSinceEpoch(sunsetTime*1000,isUtc:true),
+    temp: Temperature(defaultTemperature:safeConvert(timeStep["main"]["temp"]) ),
+    minTemp: Temperature(defaultTemperature:safeConvert(timeStep["main"]["temp_min"]) ),
+    maxTemp: Temperature(defaultTemperature:safeConvert(timeStep["main"]["temp_max"]) ),
     weatherInfo: timeStep["weather"][0],
     iconUrl: "https://openweathermap.org/img/wn/${timeStep["weather"][0]["icon"]}.png",
   )
@@ -21,4 +34,6 @@ class ForecastData {
 
   return ForecastData(forecast: retrievedforecastdata);
   }
+
+
 }

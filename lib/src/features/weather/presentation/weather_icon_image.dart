@@ -11,6 +11,7 @@ class WeatherIconImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: iconUrl,
+      fit: BoxFit.fitHeight,
       width: size,
       height: size,
     );

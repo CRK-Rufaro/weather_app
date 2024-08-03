@@ -182,7 +182,7 @@ void main(){
 Map<String,dynamic> mockedJson = jsonDecode(forecastedWeatherResponse) as Map<String,dynamic>;
 
 List<WeatherData> weatherDataList = [];
-WeatherData one = WeatherData(temp: Temperature(defaultTemperature: 296.76), minTemp: Temperature(defaultTemperature: 296.76), maxTemp: Temperature(defaultTemperature: 297.87), 
+WeatherData one = WeatherData(dtSunset: DateTime.fromMillisecondsSinceEpoch(1661882248*1000,isUtc:true), dtCurrent: DateTime.fromMillisecondsSinceEpoch(1661871600*1000,isUtc:true),temp: Temperature(defaultTemperature: 296.76), minTemp: Temperature(defaultTemperature: 296.76), maxTemp: Temperature(defaultTemperature: 297.87), 
   weatherInfo: {
       "id": 500,
       "main": "Rain",
@@ -190,7 +190,7 @@ WeatherData one = WeatherData(temp: Temperature(defaultTemperature: 296.76), min
       "icon": "10d"
     }, iconUrl: "https://openweathermap.org/img/wn/10d.png");
 
-WeatherData two = WeatherData(temp: Temperature(defaultTemperature: 295.45), minTemp: Temperature(defaultTemperature: 292.84), maxTemp: Temperature(defaultTemperature: 295.45), 
+WeatherData two = WeatherData(dtSunset: DateTime.fromMillisecondsSinceEpoch(1661882248*1000,isUtc:true), dtCurrent: DateTime.fromMillisecondsSinceEpoch(1661882400*1000,isUtc:true),temp: Temperature(defaultTemperature: 295.45), minTemp: Temperature(defaultTemperature: 292.84), maxTemp: Temperature(defaultTemperature: 295.45), 
   weatherInfo: {
       "id": 500,
       "main": "Rain",
@@ -198,7 +198,7 @@ WeatherData two = WeatherData(temp: Temperature(defaultTemperature: 295.45), min
       "icon": "10n"
     }, iconUrl: "https://openweathermap.org/img/wn/10n.png");
 
-WeatherData three = WeatherData(temp: Temperature(defaultTemperature: 292.46), minTemp: Temperature(defaultTemperature: 290.31), maxTemp: Temperature(defaultTemperature: 292.46), 
+WeatherData three = WeatherData(dtSunset: DateTime.fromMillisecondsSinceEpoch(1661882248*1000,isUtc:true), dtCurrent: DateTime.fromMillisecondsSinceEpoch(1661893200*1000,isUtc:true),temp: Temperature(defaultTemperature: 292.46), minTemp: Temperature(defaultTemperature: 290.31), maxTemp: Temperature(defaultTemperature: 292.46), 
   weatherInfo: {
       "id": 500,
       "main": "Rain",
@@ -206,7 +206,7 @@ WeatherData three = WeatherData(temp: Temperature(defaultTemperature: 292.46), m
       "icon": "10n"
     }, iconUrl: "https://openweathermap.org/img/wn/10n.png");
 
-WeatherData four = WeatherData(temp: Temperature(defaultTemperature: 294.93), minTemp: Temperature(defaultTemperature: 294.93), maxTemp: Temperature(defaultTemperature: 294.93), 
+WeatherData four = WeatherData(dtSunset: DateTime.fromMillisecondsSinceEpoch(1661882248*1000,isUtc:true), dtCurrent: DateTime.fromMillisecondsSinceEpoch(1662292800*1000,isUtc:true),temp: Temperature(defaultTemperature: 294.93), minTemp: Temperature(defaultTemperature: 294.93), maxTemp: Temperature(defaultTemperature: 294.93), 
   weatherInfo: {
       "id": 804,
       "main": "Clouds",
@@ -235,6 +235,11 @@ for (int i = 0; i<matcher.forecast.length; i++){
   expect(sut.forecast.elementAt(i).maxTemp.farenheight, matcher.forecast.elementAt(i).maxTemp.farenheight);
   expect(sut.forecast.elementAt(i).weatherInfo, matcher.forecast.elementAt(i).weatherInfo);
   expect(sut.forecast.elementAt(i).iconUrl, matcher.forecast.elementAt(i).iconUrl);
+
+  expect(sut.forecast.elementAt(i).dtCurrent, matcher.forecast.elementAt(i).dtCurrent);
+  expect(sut.forecast.elementAt(i).dtSunset, matcher.forecast.elementAt(i).dtSunset);
+  
+
 }}
     
 
