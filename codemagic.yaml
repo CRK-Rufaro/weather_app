@@ -25,7 +25,9 @@ workflows:
       xcode: latest
       flutter: stable
     scripts:
-      - name: Install dependencies
+      - name: Install Flutter dependencies
+        script: flutter pub get
+      - name: Install CocoaPods dependencies
         script: |
           gem install cocoapods
           pod install --project-directory=ios
