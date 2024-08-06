@@ -22,7 +22,7 @@ workflows:
   ios-simulator:
     name: iOS Simulator Build
     environment:
-      xcode: 14.2
+      xcode: latest
       flutter: stable
     scripts:
       - name: Install dependencies
