@@ -105,6 +105,30 @@ class WeatherProvider extends ChangeNotifier {
   }
 }
 
+  enum CelsiusOrFarenheit {
+  celsius,
+  farenheit,
+}
+
+class CelsiusOrFarenheitProvider extends ChangeNotifier{
+  CelsiusOrFarenheit currentState = CelsiusOrFarenheit.celsius;
+
+  getCurrentState(){
+    return currentState;
+  }
+
+  toggleCurrentState(){
+    if(currentState == CelsiusOrFarenheit.celsius){
+      currentState = CelsiusOrFarenheit.farenheit;
+      notifyListeners();
+    }
+    else if(currentState == CelsiusOrFarenheit.farenheit){
+      currentState = CelsiusOrFarenheit.celsius;
+      notifyListeners();
+    }
+  }
+}
+
 
 
 

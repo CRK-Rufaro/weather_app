@@ -1,3 +1,15 @@
+//Rufaro
+For this application to run a .env file with the apikey in the format
+WEATHER_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+
+Needs to be created in the root directory of the project otherwise an API Exception will be thrown.
+
+To obtain an API KEY 
+visit this link: https://openweathermap.org 
+create an account and navigate to the second link:
+https://home.openweathermap.org/api_keys
+
+
 This is a weather application that allows you to search an areas weather forecast.
 
 This app will give the current weather data as well as a forecast.
@@ -16,3 +28,4 @@ This application uses Provider for state management and an http handler has been
 
 #Bonus:
 Swap from celsius to fahrenheit
+

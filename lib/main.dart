@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
       home: MultiProvider(
           providers: [
             ChangeNotifierProvider<WeatherProvider>(create: (_) => WeatherProvider(), lazy: false),
+            ChangeNotifierProvider<CelsiusOrFarenheitProvider>(create: (_) => CelsiusOrFarenheitProvider(), lazy: false),
           ],
           builder: (context, _) {
             return const WeatherPage(city: 'London');

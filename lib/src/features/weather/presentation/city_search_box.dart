@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:open_weather_example_flutter/src/constants/app_colors.dart';
 import 'package:open_weather_example_flutter/src/features/weather/application/providers.dart';
+import 'package:open_weather_example_flutter/src/features/weather/data/api_exception.dart';
 import 'package:provider/provider.dart';
 
 class CitySearchBox extends StatefulWidget {
@@ -98,7 +99,18 @@ class _CitySearchRowState extends State<CitySearchBox> {
                           print(
                             "Value passed into provider is: ${context.read<WeatherProvider>().city}");
                         }
-                        await context.read<WeatherProvider>().getWeatherData();
+                        try {
+                          await context.read<WeatherProvider>().getWeatherData();
+                        } on CityNotFoundException catch (e) {
+
+                        } on InvalidApiKeyException catch (e){
+
+                        } on UnknownException catch(e){
+
+                        } catch(e){
+                          
+                        }
+                        
                         // Navigator.push<void>(
                         //   context,
                         //   MaterialPageRoute<void>(

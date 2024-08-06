@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:open_weather_example_flutter/src/features/weather/application/providers.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/forecast_data.dart';
@@ -23,30 +25,32 @@ class ForecastWidget extends StatelessWidget {
               return const CircularProgressIndicator();
             }
             if (data.isLoading == false) {
-              List<WeatherData> forecastList = processedTimeSteps(data.forecastData!.forecast);
+              List<WeatherData> forecastList =
+                  processedTimeSteps(data.forecastData!.forecast);
               List<SingularTimeStepForecastWidget> forecastListWidgets = [];
-              for (var element in forecastList){
-                forecastListWidgets.add(SingularTimeStepForecastWidget(timeStep: element));
+              for (var element in forecastList) {
+                forecastListWidgets
+                    .add(SingularTimeStepForecastWidget(timeStep: element));
               }
               //List<SingularTimeStepForecastWidget> forecastListWidgets = forecastList.map((toElement)=>SingularTimeStepForecastWidget(timeStep: toElement))as List<SingularTimeStepForecastWidget>;
               return Container(
-                //color: Colors.amber,
+                  //color: Colors.amber,
                   //height: MediaQuery.of(context).size.height*0.2,
                   child: Center(
-                    child: Row(
-                      //mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children:  forecastListWidgets,
-                    )
-                    // ListView.builder(
-                      
-                    //     itemCount: forecastList.length,
-                    //     scrollDirection: Axis.horizontal,
-                    //     itemBuilder: (context, index) {
-                    //       return SingularTimeStepForecastWidget(
-                    //           timeStep: forecastList[index]);
-                    //     }),
-                  ));
+                      child: Row(
+                //mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: forecastListWidgets,
+              )
+                      // ListView.builder(
+
+                      //     itemCount: forecastList.length,
+                      //     scrollDirection: Axis.horizontal,
+                      //     itemBuilder: (context, index) {
+                      //       return SingularTimeStepForecastWidget(
+                      //           timeStep: forecastList[index]);
+                      //     }),
+                      ));
               // return Column(
               //   crossAxisAlignment: CrossAxisAlignment.center,
               //   children: [
@@ -58,25 +62,29 @@ class ForecastWidget extends StatelessWidget {
               // );
             }
           }
-          return const CircularProgressIndicator();
+          //return const CircularProgressIndicator();
+          return const SizedBox();
+          //Text("Start searching for city",style: Theme.of(context).textTheme.headlineMedium);
         });
   }
 }
 
 List<WeatherData> processedTimeSteps(List<WeatherData> rawTimeSteps) {
-  List <WeatherData>trimmedTimeSteps = [];
+  List<WeatherData> trimmedTimeSteps = [];
   List presentDays = [];
   // presentDays.add(rawTimeSteps.first.dtCurrent.weekday);
   // trimmedTimeSteps.add(rawTimeSteps.first);
-  for (var element in rawTimeSteps){
-    if (!presentDays.contains(element.dtCurrent.weekday)) {
-      trimmedTimeSteps.add(element);
-      presentDays.add(element.dtCurrent.weekday);
+  for (var element in rawTimeSteps) {
+    if (presentDays.length < 5) {
+      if (!presentDays.contains(element.dtCurrent.weekday)) {
+        trimmedTimeSteps.add(element);
+        presentDays.add(element.dtCurrent.weekday);
+      }
     }
   }
-  
+
   // rawTimeSteps.forEach((element) {
-    
+
   // });
   return trimmedTimeSteps;
 }
@@ -90,13 +98,17 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        // Get screen width
+    CelsiusOrFarenheit currentState = Provider.of<CelsiusOrFarenheitProvider>(context).currentState;
+    bool isCelsius = currentState == CelsiusOrFarenheit.celsius;
+
+    // Get screen width
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    bool resize(){
-      if(MediaQuery.of(context).orientation == Orientation.landscape){
-        if(MediaQuery.of(context).size.width>MediaQuery.of(context).size.height*2){
-          return true;          
+    bool resize() {
+      if (MediaQuery.of(context).orientation == Orientation.landscape) {
+        if (MediaQuery.of(context).size.width >
+            MediaQuery.of(context).size.height * 2) {
+          return true;
         }
         return false;
       }
@@ -104,13 +116,13 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
       return false;
     }
 
-
-    
-    
-
     // Calculate sizes based on screen width
-    double iconSize = resize()?screenHeight * 0.1 : screenWidth * 0.2; // 20% of screen width
-    double fontSize = resize()?screenHeight * 0.03 : screenWidth * 0.03; // 4% of screen width
+    double iconSize = resize()
+        ? screenHeight * 0.18
+        : screenWidth * 0.18; // 20% of screen width
+    double fontSize = resize()
+        ? screenHeight * 0.05
+        : screenWidth * 0.05; // 4.5% of screen width or height
     List<String> daysOfWeek = [
       'Monday',
       'Tuesday',
@@ -120,40 +132,48 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
       'Saturday',
       'Sunday'
     ];
-    String dayName = daysOfWeek[timeStep.dtCurrent.weekday - 1].substring(0,3);
+    String dayName = daysOfWeek[timeStep.dtCurrent.weekday - 1].substring(0, 3);
+    int temp = isCelsius?timeStep.temp.celsius.round():timeStep.temp.farenheight.round();
 
     return Container(
       //color: Colors.cyan,
       child: Column(
         //mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        
+        //crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           //day
           Expanded(
             flex: 2,
             child: Container(
-              alignment: Alignment.center,
-              //color: Colors.cyan,
-              child: Text(dayName,style: TextStyle(
-                color: Colors.white70,
-                fontSize: fontSize),)),
+                alignment: Alignment.center,
+                //color: Colors.cyan,
+                child: Text(
+                  dayName,
+                  style: TextStyle(color: Colors.white70, fontSize: fontSize),
+                )),
           ),
           //icon
           Expanded(
             flex: 3,
             child: Container(
-              //color: Colors.black,
-            child: WeatherIconImage(iconUrl: timeStep.iconUrl, size: iconSize)),
+                //color: Colors.black,
+                //padding: const EdgeInsets.symmetric(horizontal: 2),
+                child: WeatherIconImage(
+                    iconUrl: timeStep.iconUrl, size: iconSize)),
           ),
           //temperature
           Expanded(
             flex: 2,
             child: Container(
-              alignment: Alignment.center,
-              
-              //color: Colors.blue,
-              child: Text("${timeStep.temp.celsius.round()}°",style: TextStyle(fontSize: fontSize*0.8),)),
+                padding: const EdgeInsets.only(left: 4),
+                alignment: Alignment.center,
+
+                //color: Colors.blue,
+                child: Text(
+                  "$temp°",
+                  style: TextStyle(fontSize: fontSize * 0.9),
+                )),
           ),
         ],
       ),

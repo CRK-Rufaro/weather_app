@@ -10,36 +10,40 @@ class CurrentWeather extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {    
-    return Selector<WeatherProvider, 
-    ({String city, WeatherData? weatherData, bool isLoading})>(
-        selector: (context, provider) => (city: provider.city, weatherData: provider.currentWeatherProvider,isLoading:provider.isLoading),
-        builder: (context, data, _) {
-          if(data.weatherData!=null){
-            if(data.isLoading==true){
-            return const CircularProgressIndicator();
-          }
-          if(data.isLoading==false){
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                //color: Colors.black,
-                child: Text(data.city, style: Theme.of(context).textTheme.headlineMedium)),
-
-              //TODO account for null, errors and loading states
-              //if data.$2!=null{}
-              Expanded(
-                flex: 1,
-                child: Container(
-                  //color: Colors.amber,
-                  child: CurrentWeatherContents(data: data.weatherData!)),
-              ),
-            ],
-          );}
-          }
-          return const CircularProgressIndicator();
-        });
+    return Consumer<CelsiusOrFarenheitProvider>(
+      builder: (context, celsiusOrFarenheitProvider, child) => 
+      Selector<WeatherProvider, 
+      ({String city, WeatherData? weatherData, bool isLoading})>(
+          selector: (context, provider) => (city: provider.city, weatherData: provider.currentWeatherProvider,isLoading:provider.isLoading),
+          builder: (context, data, _) {
+            if(data.weatherData!=null){
+              if(data.isLoading==true){
+              return const CircularProgressIndicator();
+            }
+            if(data.isLoading==false){
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  //color: Colors.black,
+                  child: Text(data.city, style: Theme.of(context).textTheme.headlineMedium)),
+      
+                //TODO account for null, errors and loading states
+                //if data.$2!=null{}
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    //color: Colors.amber,
+                    child: CurrentWeatherContents(data: data.weatherData!)),
+                ),
+              ],
+            );}
+            }
+            //Provider.of<WeatherProvider>(context).getWeatherData();
+            return Text("Welcome",style: Theme.of(context).textTheme.displayMedium);
+          }),
+    );
   }
 }
 
@@ -66,10 +70,12 @@ class CurrentWeatherContents extends StatelessWidget {
     final double iconSize = resize()?50:120;
     final textSize = resize()?textTheme.displaySmall:textTheme.displayMedium;
 
+    CelsiusOrFarenheit currentState = Provider.of<CelsiusOrFarenheitProvider>(context).currentState;
+    bool isCelsius = currentState == CelsiusOrFarenheit.celsius;
 
-    final temp = data.temp.celsius.toInt().toString();
-    final minTemp = data.minTemp.celsius.toInt().toString();
-    final maxTemp = data.maxTemp.celsius.toInt().toString();
+    final temp = isCelsius?data.temp.celsius.toInt().toString():data.temp.farenheight.toInt().toString();
+    final minTemp = isCelsius?data.minTemp.celsius.toInt().toString():data.minTemp.farenheight.toInt().toString();
+    final maxTemp = isCelsius?data.maxTemp.celsius.toInt().toString():data.maxTemp.farenheight.toInt().toString();
     final highAndLow = 'H:$maxTemp° L:$minTemp°';
   
     return Column(
