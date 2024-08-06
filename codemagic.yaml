@@ -33,7 +33,6 @@ workflows:
           pod install --project-directory=ios
       - name: Build for Simulator
         script: |
-          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -sdk iphonesimulator -configuration Debug -archivePath $HOME/runner/archives/Runner.xcarchive archive
-          xcodebuild -exportArchive -archivePath $HOME/runner/archives/Runner.xcarchive -exportPath $HOME/runner/exports -exportOptionsPlist ios/ExportOptions.plist
+          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -sdk iphonesimulator -configuration Debug -derivedDataPath $HOME/derivedData
     artifacts:
-      - $HOME/runner/exports/*.ipa
+      - $HOME/derivedData/Build/Products/Debug-iphonesimulator/*.app
