@@ -1,12 +1,14 @@
+version: 2.0
+
+triggers:
+  - branch: Weather-Testing-and-Welcome-Screen
+    event: push
+
 workflows:
   default:
     name: Default Workflow
     environment:
       flutter: stable
-    triggers:
-      branches:
-        only:
-          - Weather-Testing-and-Welcome-Screen
     scripts:
       - name: Create .env file
         script: echo "WEATHER_API_KEY=$API_KEY" > .env
