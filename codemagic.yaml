@@ -3,6 +3,11 @@ workflows:
     name: Default Workflow
     environment:
       flutter: stable
+    triggers:
+      # Trigger the build only for the specified branch on push
+      branches:
+        only:
+          - Weather-Testing-and-Welcome-Screen
     scripts:
       - name: Create .env file
         script: echo "WEATHER_API_KEY=$WEATHER_API_KEY" > .env
