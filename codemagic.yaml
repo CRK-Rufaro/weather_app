@@ -4,7 +4,6 @@ workflows:
     environment:
       flutter: stable
     triggers:
-      # Trigger the build only for the specified branch on push
       branches:
         only:
           - Weather-Testing-and-Welcome-Screen
@@ -17,3 +16,20 @@ workflows:
         script: flutter pub get
       - name: Run tests
         script: flutter test
+
+  ios-simulator:
+    name: iOS Simulator Build
+    environment:
+      xcode: 14.2
+      flutter: stable
+    scripts:
+      - name: Install dependencies
+        script: |
+          gem install cocoapods
+          pod install --project-directory=ios
+      - name: Build for Simulator
+        script: |
+          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -sdk iphonesimulator -configuration Debug -archivePath $HOME/runner/archives/Runner.xcarchive archive
+          xcodebuild -exportArchive -archivePath $HOME/runner/archives/Runner.xcarchive -exportPath $HOME/runner/exports -exportOptionsPlist ios/ExportOptions.plist
+    artifacts:
+      - $HOME/runner/exports/*.ipa
