@@ -6,6 +6,8 @@ workflows:
     scripts:
       - name: Create .env file
         script: echo "WEATHER_API_KEY=$WEATHER_API_KEY" > .env
+      - name: Print .env file
+        script: cat .env
       - name: Install dependencies
         script: flutter pub get
       - name: Run tests
