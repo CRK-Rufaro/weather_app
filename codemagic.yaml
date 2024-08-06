@@ -10,7 +10,7 @@ workflows:
           - Weather-Testing-and-Welcome-Screen
     scripts:
       - name: Create .env file
-        script: echo "WEATHER_API_KEY=$WEATHER_API_KEY" > .env
+        script: echo "WEATHER_API_KEY=$API_KEY" > .env
       - name: Print .env file
         script: cat .env
       - name: Install dependencies
