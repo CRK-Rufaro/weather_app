@@ -18,7 +18,7 @@ class CurrentWeather extends StatelessWidget {
           builder: (context, data, _) {
             if(data.weatherData!=null){
               if(data.isLoading==true){
-              return const CircularProgressIndicator();
+              return const CircularProgressIndicator(color: Colors.white,);
             }
             if(data.isLoading==false){
             return Column(
@@ -40,8 +40,12 @@ class CurrentWeather extends StatelessWidget {
               ],
             );}
             }
-            //Provider.of<WeatherProvider>(context).getWeatherData();
-            return Text("Welcome",style: Theme.of(context).textTheme.displayMedium);
+            //Immediately Loads into London Search Results
+            return const CircularProgressIndicator(color: Colors.white,);
+            
+            //Loads into Welcome Screen and then London Search Results
+            //return Text("Welcome",style: Theme.of(context).textTheme.displayMedium);
+            
           }),
     );
   }

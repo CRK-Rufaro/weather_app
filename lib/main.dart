@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:open_weather_example_flutter/src/api/api_keys.dart';
 import 'package:open_weather_example_flutter/src/features/weather/application/providers.dart';
@@ -5,9 +7,20 @@ import 'package:open_weather_example_flutter/src/features/weather/presentation/w
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() async{
+void main() async {
+  const envFilePath = '\C:\\dev\\Flutter\\GitHub\\weather_app\\.env';
+    final currentDirectory = Directory.current.path;
+  print('Current working directory: $currentDirectory');
+
+  if (File(envFilePath).existsSync()) {
+    print('Success: .env file found at " $envFilePath"');
+    await dotenv.load(fileName: envFilePath);
+  } else {
+    print('Warning: .env file not found at $envFilePath');
+  }
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
+  await dotenv.load();
+
   setupInjection();
   runApp(const MyApp());
 }
@@ -43,14 +56,16 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: MultiProvider(
-          providers: [
-            ChangeNotifierProvider<WeatherProvider>(create: (_) => WeatherProvider(), lazy: false),
-            ChangeNotifierProvider<CelsiusOrFarenheitProvider>(create: (_) => CelsiusOrFarenheitProvider(), lazy: false),
-          ],
-          builder: (context, _) {
-            return const WeatherPage(city: 'London');
-          },
-          ),
+        providers: [
+          ChangeNotifierProvider<WeatherProvider>(
+              create: (_) => WeatherProvider(), lazy: false),
+          ChangeNotifierProvider<CelsiusOrFarenheitProvider>(
+              create: (_) => CelsiusOrFarenheitProvider(), lazy: false),
+        ],
+        builder: (context, _) {
+          return const WeatherPage(city: 'London');
+        },
+      ),
     );
   }
 }
