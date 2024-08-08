@@ -16,9 +16,9 @@ class WeatherPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
-          //width: MediaQuery.of(context).size.width,
+          width: MediaQuery.of(context).size.width,
 
-          width: double.infinity,
+          //width: double.infinity,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -34,25 +34,25 @@ class WeatherPage extends StatelessWidget {
                 Spacer(),
                 Container(
                   alignment: Alignment.center,
-                  //color: Colors.deepPurpleAccent,
+                  color: Colors.deepPurpleAccent,
                   height: MediaQuery.of(context).size.height*0.4,
                   width: MediaQuery.of(context).size.width,
                   child: CurrentWeather()),
                 Spacer(),
                 Container(
                   alignment: Alignment.center,
-                  //color: Colors.brown,
+                  color: Colors.brown,
                   height: MediaQuery.of(context).size.height*0.25,
                   child: ForecastWidget()),
                 Spacer(),
                 Container(
                   padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
-                  //color: Colors.lime,
+                  color: Colors.lime,
                   alignment: Alignment.bottomRight,
                   child: ConvertCelsiusFahrenheit()),
                 //Spacer(),
                 Container(
-                  //color: Colors.amber,
+                  color: Colors.amber,
                   alignment: Alignment.topCenter,
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   height: MediaQuery.of(context).size.height*0.2,

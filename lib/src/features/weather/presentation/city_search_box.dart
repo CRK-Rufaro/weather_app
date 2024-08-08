@@ -61,52 +61,57 @@ class _CitySearchRowState extends State<CitySearchBox> {
             bottomRight: Radius.circular(_radius),
           ),
         ),
-        child: SizedBox(
-            height: _radius * 2,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _searchController,
-                    style: const TextStyle(color: Colors.black),
-
-                    decoration: const InputDecoration(
-                      // border: OutlineInputBorder(borderRadius: BorderRadius.only(
-                      //   topLeft: Radius.circular(4),
-                      //   bottomLeft: Radius.circular(4),
-                      // ),),
-                      labelText: 'Enter city name',
-                      labelStyle: TextStyle(color: Colors.black54),
-                      filled: true,
-
-                      //fillColor:
+        child: Container(
+          color: Colors.green,
+          child: SizedBox(
+              height: _radius * 2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      style: const TextStyle(color: Colors.black),
+          
+                      decoration: const InputDecoration(
+                        // border: OutlineInputBorder(borderRadius: BorderRadius.only(
+                        //   topLeft: Radius.circular(4),
+                        //   bottomLeft: Radius.circular(4),
+                        // ),),
+                        labelText: 'Enter city name',
+                        labelStyle: TextStyle(color: Colors.black54),
+                        filled: true,
+          
+                        //fillColor:
+                      ),
+          
+                      //TODO make component functional and add style
                     ),
-
-                    //TODO make component functional and add style
                   ),
-                ),
-                InkWell(
-                  child: Container(
-                    height: _radius * 2 - 4,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                      color: AppColors.accentColor,
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(_radius),
-                        bottomRight: Radius.circular(_radius),
+                  InkWell(
+                    
+                    onTap: _buttonAction,
+                    
+                    child: Container(
+                      height: _radius * 2 - 4,
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                        color: AppColors.accentColor,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(_radius),
+                          bottomRight: Radius.circular(_radius),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Text('search',
+                            style: Theme.of(context).textTheme.bodyLarge),
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Text('search',
-                          style: Theme.of(context).textTheme.bodyLarge),
-                    ),
                   ),
-                  onTap: _buttonAction,
-                ),
-              ],
-            )),
+                ],
+              )),
+        ),
       ),
     );
   }

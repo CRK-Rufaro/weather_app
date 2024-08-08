@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:open_weather_example_flutter/src/features/weather/application/providers.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/forecast_data.dart';
@@ -36,6 +34,7 @@ class ForecastWidget extends StatelessWidget {
               return Container(
                   //color: Colors.amber,
                   //height: MediaQuery.of(context).size.height*0.2,
+                  //width: MediaQuery.of(context).size.width,
                   child: Center(
                       child: Row(
                 //mainAxisSize: MainAxisSize.max,
@@ -136,44 +135,54 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
     int temp = isCelsius?timeStep.temp.celsius.round():timeStep.temp.farenheight.round();
 
     return Container(
-      //color: Colors.cyan,
+      color: Colors.cyan,
+      width: MediaQuery.of(context).size.width/5,
+
       child: Column(
         //mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           //day
           Expanded(
             flex: 2,
             child: Container(
-                alignment: Alignment.center,
-                //color: Colors.cyan,
-                child: Text(
-                  dayName,
-                  style: TextStyle(color: Colors.white70, fontSize: fontSize),
+                alignment: Alignment.topCenter,
+                color: Colors.blueGrey,
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    dayName,
+                    style: TextStyle(color: Colors.white70, fontSize: fontSize),
+                  ),
                 )),
           ),
           //icon
           Expanded(
             flex: 3,
-            child: Container(
-                //color: Colors.black,
-                //padding: const EdgeInsets.symmetric(horizontal: 2),
-                child: WeatherIconImage(
-                    iconUrl: timeStep.iconUrl, size: iconSize)),
+            child: FittedBox(
+                  fit: BoxFit.contain,
+
+              child: Container(
+                  color: Colors.black,
+                  //padding: const EdgeInsets.symmetric(horizontal: 2),
+                  child: WeatherIconImage(
+                      iconUrl: timeStep.iconUrl, size: iconSize)),
+            ),
           ),
           //temperature
           Expanded(
             flex: 2,
             child: Container(
-                padding: const EdgeInsets.only(left: 4),
-                alignment: Alignment.center,
-
-                //color: Colors.blue,
+              color: Colors.red,
+              child: FittedBox(
+                    fit: BoxFit.contain,
                 child: Text(
-                  "$temp°",
+                  " $temp°",
                   style: TextStyle(fontSize: fontSize * 0.9),
-                )),
+                ),
+              ),
+            ),
           ),
         ],
       ),

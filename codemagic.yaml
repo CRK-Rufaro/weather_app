@@ -9,11 +9,11 @@ workflows:
     name: Default Workflow
     environment:
       flutter: stable
+      groups:
+        - API_KEYS
     scripts:
       - name: Create .env file
         script: echo "WEATHER_API_KEY=$API_KEY" > .env
-      - name: Print .env file
-        script: cat .env
       - name: Install dependencies
         script: flutter pub get
       - name: Run tests
@@ -24,6 +24,8 @@ workflows:
     environment:
       xcode: latest
       flutter: stable
+      groups:
+        - API_KEYS
     scripts:
       - name: Create .env file
         script: echo "WEATHER_API_KEY=$API_KEY" > .env
