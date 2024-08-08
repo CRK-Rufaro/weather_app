@@ -25,6 +25,10 @@ workflows:
       xcode: latest
       flutter: stable
     scripts:
+      - name: Create .env file
+        script: echo "WEATHER_API_KEY=$API_KEY" > .env
+      - name: Print .env file
+        script: cat .env
       - name: Install Flutter dependencies
         script: flutter pub get
       - name: Install CocoaPods dependencies

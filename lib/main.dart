@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  const envFilePath = '\C:\\dev\\Flutter\\GitHub\\weather_app\\.env';
+  const envFilePath = '/C:/dev/Flutter/GitHub/weather_app/.env';
     final currentDirectory = Directory.current.path;
   print('Current working directory: $currentDirectory');
 
