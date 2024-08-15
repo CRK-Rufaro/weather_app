@@ -1,13 +1,20 @@
 //Rufaro
-For this application to run a .env file with the apikey in the format
+Open weather has updated its API, geolocating is now done independantly of fetching weather & forecasts, the project files have been updated to match that.
+The application has been unit and widget tested.
+The application is now responsive, dynamically adjusting to fit different screen sizes and orientations.
+The codemagic.yaml file includes a workflow that builds a simulator IOS app bundle.
+(Critical NB: An environment variable called API_KEY of the group API_KEYS needs to created for a .env to be dynamically generated during the codemagic build process).
+
+This app bundle can be uploaded and used on appertise.io (https://appetize.io/) or similar services to test or view the application online.
+
+Similarly on a local machine, .env file with the apikey in the format
 WEATHER_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
-Needs to be created in the root directory of the project otherwise an API Exception will be thrown.
+Needs to be present in the root directory of the project for the application to run.
 
 To obtain an API KEY 
-visit this link: https://openweathermap.org 
-create an account and navigate to the second link:
-https://home.openweathermap.org/api_keys
+visit: https://openweathermap.org
+//
 
 
 This is a weather application that allows you to search an areas weather forecast.
