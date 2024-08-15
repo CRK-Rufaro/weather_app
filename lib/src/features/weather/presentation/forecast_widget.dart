@@ -137,7 +137,7 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
 
     return Container(
       //color: Colors.cyan,
-      width: MediaQuery.of(context).size.width/5,
+      width: screenWidth/5,
 
       child: Column(
         //mainAxisSize: MainAxisSize.min,
