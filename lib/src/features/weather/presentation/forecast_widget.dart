@@ -33,17 +33,16 @@ class ForecastWidget extends StatelessWidget {
                     .add(SingularTimeStepForecastWidget(timeStep: element));
               }
               //List<SingularTimeStepForecastWidget> forecastListWidgets = forecastList.map((toElement)=>SingularTimeStepForecastWidget(timeStep: toElement))as List<SingularTimeStepForecastWidget>;
-              return Container(
-                  //color: Colors.amber,
-                  //height: MediaQuery.of(context).size.height*0.2,
-                  width: MediaQuery.of(context).size.width -
-                      MediaQuery.of(context).padding.left -
-                      MediaQuery.of(context).padding.right,
-                  child: Row(
-                    //mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: forecastListWidgets,
-                  ));
+              return SafeArea(
+                child: Container(
+                    color: Colors.amber,
+                    //height: MediaQuery.of(context).size.height*0.2,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: forecastListWidgets,
+                    )),
+              );
               // return Column(
               //   crossAxisAlignment: CrossAxisAlignment.center,
               //   children: [
