@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:open_weather_example_flutter/src/api/api_keys.dart';
 import 'package:open_weather_example_flutter/src/features/weather/application/providers.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_data.dart';
@@ -12,10 +13,13 @@ void main() {
     // Test when data is loading
     testWidgets('displays CircularProgressIndicator when loading',
         (WidgetTester tester) async {
+      final GetIt getIt = GetIt.instance;
+      getIt.registerSingleton<String>('your_api_key_here',
+          instanceName: 'api_key');
+
+      GetIt.instance.reset();
       // Create a mock WeatherProvider
-      WidgetsFlutterBinding.ensureInitialized();
-      await dotenv.load();
-      setupInjection();
+
       final weatherProvider = WeatherProvider();
       weatherProvider.isLoading = true; // Set loading state
 
@@ -43,10 +47,12 @@ void main() {
     // Test when data is loaded
     testWidgets('displays weather data when loaded',
         (WidgetTester tester) async {
+                final GetIt getIt = GetIt.instance;
+      getIt.registerSingleton<String>('your_api_key_here',
+          instanceName: 'api_key');
+          GetIt.instance.reset();
       // Create a mock WeatherProvider with data
-      WidgetsFlutterBinding.ensureInitialized();
-      await dotenv.load();
-      setupInjection();
+
       final weatherProvider = WeatherProvider();
       weatherProvider.city = "Test City";
       weatherProvider.isLoading = false; // Set not loading
@@ -89,40 +95,40 @@ void main() {
       expect(find.text('H:297° L:296°'), findsOneWidget); // Check high and low
     });
 
-    group('displays error messages', () {    
-    testWidgets('City not found',
-        (WidgetTester tester) async {
-      // Create a mock WeatherProvider with data
-      WidgetsFlutterBinding.ensureInitialized();
-      await dotenv.load();
-      setupInjection();
-      final weatherProvider = WeatherProvider();
-      weatherProvider.hasError = true;
-      weatherProvider.errorMessage = "City not found";
+    group('displays error messages', () {
+      testWidgets('City not found', (WidgetTester tester) async {
+              final GetIt getIt = GetIt.instance;
+      getIt.registerSingleton<String>('your_api_key_here',
+          instanceName: 'api_key');
+          GetIt.instance.reset();
+        // Create a mock WeatherProvider with data
 
+        final weatherProvider = WeatherProvider();
+        weatherProvider.hasError = true;
+        weatherProvider.errorMessage = "City not found";
 
-      await tester.pumpWidget(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider<WeatherProvider>.value(
-                value: weatherProvider),
-            ChangeNotifierProvider<CelsiusOrFarenheitProvider>(
-              create: (_) => CelsiusOrFarenheitProvider(),
-            ),
-          ],
-          child: const MaterialApp(
-            home: Scaffold(
-              body: CurrentWeather(),
+        await tester.pumpWidget(
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider<WeatherProvider>.value(
+                  value: weatherProvider),
+              ChangeNotifierProvider<CelsiusOrFarenheitProvider>(
+                create: (_) => CelsiusOrFarenheitProvider(),
+              ),
+            ],
+            child: const MaterialApp(
+              home: Scaffold(
+                body: CurrentWeather(),
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      // Verify the weather data is displayed
-      expect(find.text('City not found'), findsOneWidget);
+        // Verify the weather data is displayed
+        expect(find.text('City not found'), findsOneWidget);
+      });
+
+      // You can add more tests here for different scenarios, like handling errors or switching between Celsius and Fahrenheit.
     });
-
-    // You can add more tests here for different scenarios, like handling errors or switching between Celsius and Fahrenheit.
-  });
   });
 }

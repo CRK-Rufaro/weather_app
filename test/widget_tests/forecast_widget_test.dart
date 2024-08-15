@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:open_weather_example_flutter/src/api/api_keys.dart';
 import 'package:open_weather_example_flutter/src/features/weather/application/providers.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/forecast_data.dart';
@@ -83,9 +84,11 @@ void main() {
     
     testWidgets('displays CircularProgressIndicator when loading',
         (WidgetTester tester) async {
-      WidgetsFlutterBinding.ensureInitialized();
-      await dotenv.load();
-      setupInjection();
+      final GetIt getIt = GetIt.instance;
+      getIt.registerSingleton<String>('your_api_key_here',
+          instanceName: 'api_key');
+
+      GetIt.instance.reset();
       final weatherProvider = WeatherProvider();
       weatherProvider.isLoading = true;
       weatherProvider.hourlyWeatherProvider = forecastData;
@@ -110,9 +113,11 @@ void main() {
 
     testWidgets('No forecast data found',
         (WidgetTester tester) async {
-      WidgetsFlutterBinding.ensureInitialized();
-      await dotenv.load();
-      setupInjection();
+      final GetIt getIt = GetIt.instance;
+      getIt.registerSingleton<String>('your_api_key_here',
+          instanceName: 'api_key');
+
+      GetIt.instance.reset();
       final weatherProvider = WeatherProvider();
       weatherProvider.isLoading = false;
       weatherProvider.hourlyWeatherProvider = ForecastData(forecast: []);
