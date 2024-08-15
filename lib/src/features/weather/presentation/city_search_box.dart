@@ -62,9 +62,9 @@ class _CitySearchRowState extends State<CitySearchBox> {
           ),
         ),
         child: Container(
-          color: Colors.green,
+          //color: Colors.green,
           child: SizedBox(
-              height: _radius * 2,
+              height: _radius*2 ,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -93,7 +93,7 @@ class _CitySearchRowState extends State<CitySearchBox> {
                     onTap: _buttonAction,
                     
                     child: Container(
-                      height: _radius * 2 - 4,
+                      height: _radius * 2 ,
                       alignment: Alignment.center,
                       decoration: const BoxDecoration(
                         color: AppColors.accentColor,

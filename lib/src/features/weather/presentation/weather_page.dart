@@ -11,14 +11,17 @@ class WeatherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.bottom - MediaQuery.of(context).padding.top;
+    double width = MediaQuery.of(context).size.width - MediaQuery.of(context).padding.left - MediaQuery.of(context).padding.right;
 
     return SafeArea(
       child: Scaffold(
+        //resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
           child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-      
+            height: height,
+            width: width,
+                
             //width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -27,41 +30,43 @@ class WeatherPage extends StatelessWidget {
                 colors: AppColors.rainGradient,
               ),
             ),
-            child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Spacer(),
-                  Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                //Spacer(),
+                Container(
+                  alignment: Alignment.center,
+                  //color: Colors.deepPurpleAccent,
+                  height: height*0.4,
+                  width: width,
+                  child: CurrentWeather()),
+                
+                Container(
+                  alignment: Alignment.center,
+                  //color: Colors.brown,
+                  height: height*0.25,
+                  child: ForecastWidget()),
+                //Spacer(),
+                Container(
+                  //height: MediaQuery.of(context).size.height*0.07,
+                  //padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
+                  //color: Colors.lime,
+                  alignment: Alignment.bottomRight,
+                  child: ConvertCelsiusFahrenheit()),
+                //Spacer(),
+                Expanded(
+                  child: Container(
+                    //color: Colors.amber,
                     alignment: Alignment.center,
-                    color: Colors.deepPurpleAccent,
-                    height: MediaQuery.of(context).size.height*0.4,
-                    width: MediaQuery.of(context).size.width,
-                    child: CurrentWeather()),
-                  Spacer(),
-                  Container(
-                    alignment: Alignment.center,
-                    color: Colors.brown,
-                    height: MediaQuery.of(context).size.height*0.25,
-                    child: ForecastWidget()),
-                  Spacer(),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
-                    color: Colors.lime,
-                    alignment: Alignment.bottomRight,
-                    child: ConvertCelsiusFahrenheit()),
-                  //Spacer(),
-                  Container(
-                    color: Colors.amber,
-                    alignment: Alignment.topCenter,
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    height: MediaQuery.of(context).size.height*0.2,
+                    //padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    //height: MediaQuery.of(context).size.height*0.18,
                     child: CitySearchBox()),
-                  Spacer(),
-                  
-                ],
-              ),
+                ),
+                  //const Spacer(),
+                
+              ],
             ),
           ),
         ),

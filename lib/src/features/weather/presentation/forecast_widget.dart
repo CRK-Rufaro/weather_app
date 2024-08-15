@@ -101,8 +101,9 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
     bool isCelsius = currentState == CelsiusOrFarenheit.celsius;
 
     // Get screen width
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    double screenHeight = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.bottom - MediaQuery.of(context).padding.top;
+    double screenWidth = MediaQuery.of(context).size.width - MediaQuery.of(context).padding.left - MediaQuery.of(context).padding.right;
+
     bool resize() {
       if (MediaQuery.of(context).orientation == Orientation.landscape) {
         if (MediaQuery.of(context).size.width >
@@ -135,7 +136,7 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
     int temp = isCelsius?timeStep.temp.celsius.round():timeStep.temp.farenheight.round();
 
     return Container(
-      color: Colors.cyan,
+      //color: Colors.cyan,
       width: MediaQuery.of(context).size.width/5,
 
       child: Column(
@@ -145,10 +146,10 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
         children: [
           //day
           Expanded(
-            flex: 2,
+            flex: 1,
             child: Container(
-                alignment: Alignment.topCenter,
-                color: Colors.blueGrey,
+                //alignment: Alignment.center,
+                //color: Colors.blueGrey,
                 child: FittedBox(
                   fit: BoxFit.contain,
                   child: Text(
@@ -164,7 +165,7 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
                   fit: BoxFit.contain,
 
               child: Container(
-                  color: Colors.black,
+                  //color: Colors.black,
                   //padding: const EdgeInsets.symmetric(horizontal: 2),
                   child: WeatherIconImage(
                       iconUrl: timeStep.iconUrl, size: iconSize)),
@@ -172,9 +173,9 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
           ),
           //temperature
           Expanded(
-            flex: 2,
+            flex: 1,
             child: Container(
-              color: Colors.red,
+              //color: Colors.red,
               child: FittedBox(
                     fit: BoxFit.contain,
                 child: Text(

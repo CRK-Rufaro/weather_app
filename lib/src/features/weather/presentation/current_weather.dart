@@ -21,23 +21,22 @@ class CurrentWeather extends StatelessWidget {
               return const CircularProgressIndicator(color: Colors.white,);
             }
             if(data.isLoading==false){
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  //color: Colors.black,
-                  child: Text(data.city, style: Theme.of(context).textTheme.headlineMedium)),
-      
-                //TODO account for null, errors and loading states
-                //if data.$2!=null{}
-                Expanded(
-                  flex: 1,
-                  child: Container(
+            return FittedBox(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    //color: Colors.black,
+                    child: Text(data.city, style: Theme.of(context).textTheme.headlineMedium)),
+                    
+                  //TODO account for null, errors and loading states
+                  //if data.$2!=null{}
+                  Container(
                     //color: Colors.amber,
                     child: CurrentWeatherContents(data: data.weatherData!)),
-                ),
-              ],
+                ],
+              ),
             );}
             }
             //Immediately Loads into London Search Results
