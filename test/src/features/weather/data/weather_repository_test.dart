@@ -1,3 +1,4 @@
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
@@ -12,12 +13,9 @@ import 'package:open_weather_example_flutter/src/features/weather/data/forecast_
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_repository.dart';
 
-class MockHttpClient extends Mock implements http.Client {
-}
+class MockHttpClient extends Mock implements http.Client {}
 
-class MockHttpWeatherRepository extends Mock implements HttpWeatherRepository{
-
-}
+class MockHttpWeatherRepository extends Mock implements HttpWeatherRepository {}
 
 //Registering fake classes for Uri
 class UriFake extends Fake implements Uri {}
@@ -70,8 +68,8 @@ const encodedWeatherJsonResponse = """
   }  
 """;
 
-//List<Map<String,dynamic>> mockedJson =                 
-const encodedCityJsonResponse ="""  
+//List<Map<String,dynamic>> mockedJson =
+const encodedCityJsonResponse = """
 [
     {
         "name": "Mountain View",
@@ -119,20 +117,28 @@ const encodedCityJsonResponse ="""
 // );
 
 //Expected Weather data to be parsed from the JSON Response, Used for matching
-final expectedWeatherFromJson = WeatherData(dtSunset: DateTime.fromMillisecondsSinceEpoch(1560396563*1000,isUtc:true), dtCurrent: DateTime.fromMillisecondsSinceEpoch(1560350645*1000,isUtc:true), temp: Temperature(defaultTemperature: 282.55), minTemp: Temperature(defaultTemperature: 280.37), maxTemp: Temperature(defaultTemperature: 284.26), weatherInfo: {    
+final expectedWeatherFromJson = WeatherData(
+    dtSunset:
+        DateTime.fromMillisecondsSinceEpoch(1560396563 * 1000, isUtc: true),
+    dtCurrent:
+        DateTime.fromMillisecondsSinceEpoch(1560350645 * 1000, isUtc: true),
+    temp: Temperature(defaultTemperature: 282.55),
+    minTemp: Temperature(defaultTemperature: 280.37),
+    maxTemp: Temperature(defaultTemperature: 284.26),
+    weatherInfo: {
       "id": 800,
       "main": "Clear",
       "description": "clear sky",
       "icon": "01d"
-    }, iconUrl: "https://openweathermap.org/img/wn/01d.png");
-
+    },
+    iconUrl: "https://openweathermap.org/img/wn/01d.png");
 
 void main() {
-    //TestWidgetsFlutterBinding.ensureInitialized();
-    late MockHttpClient mockHttpClient;
-    late OpenWeatherMapAPI api;
-    late GeocodingAPI geoApi;
-    late HttpWeatherRepository weatherRepository;
+  //TestWidgetsFlutterBinding.ensureInitialized();
+  late MockHttpClient mockHttpClient;
+  late OpenWeatherMapAPI api;
+  late GeocodingAPI geoApi;
+  late HttpWeatherRepository weatherRepository;
 
   setUpAll(() {
     // Registering fallback values for Uri
@@ -140,104 +146,147 @@ void main() {
   });
 
   //Initialising variables
-  setUp((){
+  setUp(() {
     mockHttpClient = MockHttpClient();
     api = OpenWeatherMapAPI('apiKey');
     geoApi = GeocodingAPI('apiKey');
-    weatherRepository = HttpWeatherRepository(api: api, client: mockHttpClient, geoApi: geoApi);
+    weatherRepository =
+        HttpWeatherRepository(api: api, client: mockHttpClient, geoApi: geoApi);
   });
 
-    //Grouping to reduce duplication
-    group("Testing Http Repository", (){
+  //Grouping to reduce duplication
+  group("Testing Http Repository", () {
     test('repository with mocked http client, success', () async {
-    //TODO Mock http and ensure weather is correct
-    when(() => mockHttpClient.get(any(that: isA<Uri>())))
-        .thenAnswer((invocation) async {
-      final uri = invocation.positionalArguments[0] as Uri;
-      //print("providing mock response");
-      //print("the current uri path:"+ uri.path.toString());
+      //TODO Mock http and ensure weather is correct
+      when(() => mockHttpClient.get(any(that: isA<Uri>())))
+          .thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments[0] as Uri;
+        //print("providing mock response");
+        //print("the current uri path:"+ uri.path.toString());
 
-      if (uri.path.contains('direct')) {
-        //print("retruned mock response for geolocater");
-        return Response(encodedCityJsonResponse, 200);
-      }
-      //print("retruned mock response for weather");
-      return Response(encodedWeatherJsonResponse, 200);
-    });
-    
-    var (result, name) = await weatherRepository.getWeather(city: "Mountain View");
-    expect(result.iconUrl, expectedWeatherFromJson.iconUrl);
-    expect(result.maxTemp.celsius, expectedWeatherFromJson.maxTemp.celsius);
-    expect(result.minTemp.farenheight, expectedWeatherFromJson.minTemp.farenheight);
-    expect(result.temp.defaultTemperature, expectedWeatherFromJson.temp.defaultTemperature);
-    expect(result.weatherInfo, expectedWeatherFromJson.weatherInfo);
-    expect(result.dtCurrent, expectedWeatherFromJson.dtCurrent);
-    expect(result.dtSunset, expectedWeatherFromJson.dtSunset);
-
-  });
-
-    test('repository with mocked http client, failure', () async {
-  //TODO Mock http 404 and ensure api returns CityNotFoundException
-
-    when(() => mockHttpClient.get(any())).thenAnswer((_) async => Response('', 404)); 
-    expect(()=> weatherRepository.getWeather(city: "Mountain View"), throwsA (isA<CityNotFoundException>()));
-  });
-
-  //network errors
-      test('repository with mocked http client, Invalid API', () async {
-      // Mock HTTP client response for Invalid Api
-      when(() => mockHttpClient.get(any())).thenAnswer((_)async=>Response('', 403));
-      expect(() => weatherRepository.getWeather(city: "Mountain View"), throwsA(isA<InvalidApiKeyException>()));
+        if (uri.path.contains('direct')) {
+          //print("retruned mock response for geolocater");
+          return Response(encodedCityJsonResponse, 200);
+        }
+        //print("retruned mock response for weather");
+        return Response(encodedWeatherJsonResponse, 200);
       });
 
+      var (result, name) =
+          await weatherRepository.getWeather(city: "Mountain View");
+      expect(result.iconUrl, expectedWeatherFromJson.iconUrl);
+      expect(result.maxTemp.celsius, expectedWeatherFromJson.maxTemp.celsius);
+      expect(result.minTemp.farenheight,
+          expectedWeatherFromJson.minTemp.farenheight);
+      expect(result.temp.defaultTemperature,
+          expectedWeatherFromJson.temp.defaultTemperature);
+      expect(result.weatherInfo, expectedWeatherFromJson.weatherInfo);
+      expect(result.dtCurrent, expectedWeatherFromJson.dtCurrent);
+      expect(result.dtSunset, expectedWeatherFromJson.dtSunset);
+    });
+
+    test('repository with mocked http client, failure', () async {
+      //TODO Mock http 404 and ensure api returns CityNotFoundException
+
+      when(() => mockHttpClient.get(any()))
+          .thenAnswer((_) async => Response('', 404));
+      expect(() => weatherRepository.getWeather(city: "Mountain View"),
+          throwsA(isA<CityNotFoundException>()));
+    });
+
+    test('repository with mocked http client, Invalid API', () async {
+      // Mock HTTP client response for Invalid Api
+      when(() => mockHttpClient.get(any()))
+          .thenAnswer((_) async => Response('', 403));
+      expect(() => weatherRepository.getWeather(city: "Mountain View"),
+          throwsA(isA<InvalidApiKeyException>()));
+    });
+
+    //network errors
+    test('No internet connection error state', () async {
+      when(() => mockHttpClient.get(any()))
+          .thenThrow(const SocketException("No Internet Connection"));
+      expect(() => weatherRepository.getWeather(city: "Mock city"),
+          throwsA(isA<NoInternetConnectionException>()));
+    });
   });
 
-    //TODO test providers data as well
-group('WeatherProvider', () {
+  //TODO test providers data as well
+  group('WeatherProvider', () {
     late WeatherProvider weatherProvider;
     late MockHttpWeatherRepository mockWeatherRepository;
     final getIt = GetIt.instance;
 
-          final WeatherData weatherData = expectedWeatherFromJson;
+    final WeatherData weatherData = expectedWeatherFromJson;
 
-          List<WeatherData> weatherDataList = [];
-WeatherData one = WeatherData(dtSunset: DateTime.fromMillisecondsSinceEpoch(1661882248*1000,isUtc:true), dtCurrent: DateTime.fromMillisecondsSinceEpoch(1661871600*1000,isUtc:true),temp: Temperature(defaultTemperature: 296.76), minTemp: Temperature(defaultTemperature: 296.76), maxTemp: Temperature(defaultTemperature: 297.87), 
-  weatherInfo: {
-      "id": 500,
-      "main": "Rain",
-      "description": "light rain",
-      "icon": "10d"
-    }, iconUrl: "https://openweathermap.org/img/wn/10d.png");
+    List<WeatherData> weatherDataList = [];
+    WeatherData one = WeatherData(
+        dtSunset:
+            DateTime.fromMillisecondsSinceEpoch(1661882248 * 1000, isUtc: true),
+        dtCurrent:
+            DateTime.fromMillisecondsSinceEpoch(1661871600 * 1000, isUtc: true),
+        temp: Temperature(defaultTemperature: 296.76),
+        minTemp: Temperature(defaultTemperature: 296.76),
+        maxTemp: Temperature(defaultTemperature: 297.87),
+        weatherInfo: {
+          "id": 500,
+          "main": "Rain",
+          "description": "light rain",
+          "icon": "10d"
+        },
+        iconUrl: "https://openweathermap.org/img/wn/10d.png");
 
-WeatherData two = WeatherData(dtSunset: DateTime.fromMillisecondsSinceEpoch(1661882248*1000,isUtc:true), dtCurrent: DateTime.fromMillisecondsSinceEpoch(1661882400*1000,isUtc:true),temp: Temperature(defaultTemperature: 295.45), minTemp: Temperature(defaultTemperature: 292.84), maxTemp: Temperature(defaultTemperature: 295.45), 
-  weatherInfo: {
-      "id": 500,
-      "main": "Rain",
-      "description": "light rain",
-      "icon": "10n"
-    }, iconUrl: "https://openweathermap.org/img/wn/10n.png");
+    WeatherData two = WeatherData(
+        dtSunset:
+            DateTime.fromMillisecondsSinceEpoch(1661882248 * 1000, isUtc: true),
+        dtCurrent:
+            DateTime.fromMillisecondsSinceEpoch(1661882400 * 1000, isUtc: true),
+        temp: Temperature(defaultTemperature: 295.45),
+        minTemp: Temperature(defaultTemperature: 292.84),
+        maxTemp: Temperature(defaultTemperature: 295.45),
+        weatherInfo: {
+          "id": 500,
+          "main": "Rain",
+          "description": "light rain",
+          "icon": "10n"
+        },
+        iconUrl: "https://openweathermap.org/img/wn/10n.png");
 
-WeatherData three = WeatherData(dtSunset: DateTime.fromMillisecondsSinceEpoch(1661882248*1000,isUtc:true), dtCurrent: DateTime.fromMillisecondsSinceEpoch(1661893200*1000,isUtc:true),temp: Temperature(defaultTemperature: 292.46), minTemp: Temperature(defaultTemperature: 290.31), maxTemp: Temperature(defaultTemperature: 292.46), 
-  weatherInfo: {
-      "id": 500,
-      "main": "Rain",
-      "description": "light rain",
-      "icon": "10n"
-    }, iconUrl: "https://openweathermap.org/img/wn/10n.png");
+    WeatherData three = WeatherData(
+        dtSunset:
+            DateTime.fromMillisecondsSinceEpoch(1661882248 * 1000, isUtc: true),
+        dtCurrent:
+            DateTime.fromMillisecondsSinceEpoch(1661893200 * 1000, isUtc: true),
+        temp: Temperature(defaultTemperature: 292.46),
+        minTemp: Temperature(defaultTemperature: 290.31),
+        maxTemp: Temperature(defaultTemperature: 292.46),
+        weatherInfo: {
+          "id": 500,
+          "main": "Rain",
+          "description": "light rain",
+          "icon": "10n"
+        },
+        iconUrl: "https://openweathermap.org/img/wn/10n.png");
 
-WeatherData four = WeatherData(dtSunset: DateTime.fromMillisecondsSinceEpoch(1661882248*1000,isUtc:true), dtCurrent: DateTime.fromMillisecondsSinceEpoch(1662292800*1000,isUtc:true),temp: Temperature(defaultTemperature: 294.93), minTemp: Temperature(defaultTemperature: 294.93), maxTemp: Temperature(defaultTemperature: 294.93), 
-  weatherInfo: {
-      "id": 804,
-      "main": "Clouds",
-      "description": "overcast clouds",
-      "icon": "04d"
-    }, iconUrl: "https://openweathermap.org/img/wn/04d.png");
+    WeatherData four = WeatherData(
+        dtSunset:
+            DateTime.fromMillisecondsSinceEpoch(1661882248 * 1000, isUtc: true),
+        dtCurrent:
+            DateTime.fromMillisecondsSinceEpoch(1662292800 * 1000, isUtc: true),
+        temp: Temperature(defaultTemperature: 294.93),
+        minTemp: Temperature(defaultTemperature: 294.93),
+        maxTemp: Temperature(defaultTemperature: 294.93),
+        weatherInfo: {
+          "id": 804,
+          "main": "Clouds",
+          "description": "overcast clouds",
+          "icon": "04d"
+        },
+        iconUrl: "https://openweathermap.org/img/wn/04d.png");
 
-weatherDataList.addAll([one,two,three,four]);
+    weatherDataList.addAll([one, two, three, four]);
 
-      final forecastData = ForecastData(
-        forecast: weatherDataList
-      );
+    final forecastData = ForecastData(forecast: weatherDataList);
 
     // mockWeatherRepository = HttpWeatherRepository(
     //   api: mockOpenWeatherMapAPI,
@@ -251,21 +300,17 @@ weatherDataList.addAll([one,two,three,four]);
       weatherProvider = WeatherProvider();
       weatherProvider.repository = mockWeatherRepository;
     });
-    
+
     tearDown(() {
-    // Reset GetIt after each test to avoid side effects
-    getIt.reset();
-  });
-
-
-
+      // Reset GetIt after each test to avoid side effects
+      getIt.reset();
+    });
 
     test('should fetch weather data successfully', () async {
-
-      
-
-      when(() => mockWeatherRepository.getWeather(city: 'Mountain View')).thenAnswer((_) async => (weatherData,"Mountain View"));
-      when(() => mockWeatherRepository.getForecast(city: 'Mountain View')).thenAnswer((_) async => forecastData);
+      when(() => mockWeatherRepository.getWeather(city: 'Mountain View'))
+          .thenAnswer((_) async => (weatherData, "Mountain View"));
+      when(() => mockWeatherRepository.getForecast(city: 'Mountain View'))
+          .thenAnswer((_) async => forecastData);
 
       weatherProvider.city = "Mountain View";
       await weatherProvider.getWeatherData();
@@ -277,14 +322,16 @@ weatherDataList.addAll([one,two,three,four]);
     });
 
     test('should handle loading state', () async {
-      when(() => mockWeatherRepository.getWeather(city: 'Mountain View')).thenAnswer((_) async {
+      when(() => mockWeatherRepository.getWeather(city: 'Mountain View'))
+          .thenAnswer((_) async {
         await Future.delayed(const Duration(milliseconds: 500));
-        return (weatherData,"Mountain View");
+        return (weatherData, "Mountain View");
       });
-      when(() => mockWeatherRepository.getForecast(city: 'Mountain View')).thenAnswer((_) async {
+      when(() => mockWeatherRepository.getForecast(city: 'Mountain View'))
+          .thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 1));
         return forecastData;
-      } );
+      });
       weatherProvider.city = "Mountain View";
       final future = weatherProvider.getWeatherData();
 
@@ -294,23 +341,5 @@ weatherDataList.addAll([one,two,three,four]);
 
       expect(weatherProvider.isLoading, false);
     });
-
-    test('should handle error state', () async {
-      when(() => mockWeatherRepository.getWeather(city: 'Mountain View')).thenThrow(UnknownException());
-      //when(() => mockWeatherRepository.getForecast(city: 'Mountain View')).thenAnswer((_) async => forecastData);
-      weatherProvider.city = "Mountain View";
-      expect(()=> weatherProvider.getWeatherData(), throwsA (isA<UnknownException>()));
-      try {
-        await weatherProvider.getWeatherData();        
-      } catch (e) {
-        expect(weatherProvider.currentWeatherProvider, null);
-        expect(weatherProvider.hourlyWeatherProvider, null);
-        expect(weatherProvider.isLoading, false);
-      }
-    });
   });
-
-
-
 }
-

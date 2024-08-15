@@ -13,9 +13,12 @@ class CurrentWeather extends StatelessWidget {
     return Consumer<CelsiusOrFarenheitProvider>(
       builder: (context, celsiusOrFarenheitProvider, child) => 
       Selector<WeatherProvider, 
-      ({String city, WeatherData? weatherData, bool isLoading})>(
-          selector: (context, provider) => (city: provider.city, weatherData: provider.currentWeatherProvider,isLoading:provider.isLoading),
+      ({String city, WeatherData? weatherData, bool isLoading, bool hasError, String errorMessage})>(
+          selector: (context, provider) => (city: provider.city, weatherData: provider.currentWeatherProvider,isLoading:provider.isLoading,hasError:provider.hasError, errorMessage:provider.errorMessage),
           builder: (context, data, _) {
+            if(data.hasError){
+              return Center(child: Text(data.errorMessage,style:const TextStyle(color: Colors.white,fontSize:20),),);
+            }
             if(data.weatherData!=null){
               if(data.isLoading==true){
               return const CircularProgressIndicator(color: Colors.white,);
@@ -51,7 +54,7 @@ class CurrentWeather extends StatelessWidget {
 }
 
 class CurrentWeatherContents extends StatelessWidget {
-  const CurrentWeatherContents({super.key, required this.data});
+  const CurrentWeatherContents({super.key, required this.data, });
 
   final WeatherData data;
   

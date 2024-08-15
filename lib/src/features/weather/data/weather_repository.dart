@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:open_weather_example_flutter/src/api/api.dart';
@@ -19,6 +20,7 @@ class HttpWeatherRepository {
       {required this.api, required this.client, required this.geoApi});
 
   Future<(WeatherData, String)> getWeather({required String city}) async {
+    try{
     //Pseudo auto_Geo_Locating
     if (kDebugMode) {
       print("calling get weather");
@@ -54,10 +56,14 @@ class HttpWeatherRepository {
       throw UnknownException(); //Supposed to be a custom  resource not found exception
     }
     throw InvalidApiKeyException();
+  }on SocketException{
+    throw NoInternetConnectionException();
+  }
   }
 
   getForecast({required String city}) async {
     //Pseudo auto_Geo_Locating
+    try{
     final cityResponse = await getCity(city: city);
     final response = await client.get(api.forecast(cityResponse));
     if (response.statusCode != 403 && response.statusCode != 401) {
@@ -75,15 +81,19 @@ class HttpWeatherRepository {
       throw UnknownException(); //Supposed to be a custom  resource not found exception
     }
     throw InvalidApiKeyException();
+  }on SocketException{
+    throw NoInternetConnectionException();
+  }
   }
 
   Future<CityData> getCity({required String city}) async {
-    if (kDebugMode) {
+    try{
+      if (kDebugMode) {
       print("calling geolocator");
-    }
+    }      
     final response = await client.get(geoApi.directGeocoding(city));
     if (kDebugMode) {
-      print("Response Status code after geolocator${response.statusCode}");
+      print("Response Status code after geolocator ${response.statusCode}");
       if(response.statusCode == 200){
         print("Output on Success: ${response.body}");
       }
@@ -119,5 +129,9 @@ class HttpWeatherRepository {
     }
 
     throw InvalidApiKeyException();
+  }on SocketException {
+    throw NoInternetConnectionException();    
+  }
+  
   }
 }

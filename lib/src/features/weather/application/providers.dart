@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:open_weather_example_flutter/src/api/api.dart';
 import 'package:open_weather_example_flutter/src/api/api_keys.dart';
 import 'package:open_weather_example_flutter/src/api/geocoding_api.dart';
+import 'package:open_weather_example_flutter/src/features/weather/data/api_exception.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/forecast_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_repository.dart';
@@ -36,6 +37,15 @@ class WeatherProvider extends ChangeNotifier {
 
   bool isLoading =  false;
 
+  bool hasError = false;
+  String errorMessage = '';
+
+  void resetError() {
+    hasError = false;
+    errorMessage = '';
+    notifyListeners();
+  }
+
   
 
   // Future<void> getCityData() async{
@@ -48,7 +58,7 @@ class WeatherProvider extends ChangeNotifier {
       print("attempting to get weather");
       print("Value of city is : $city");
     }
-   
+    resetError();   
     isLoading = true;
     notifyListeners();
     if (kDebugMode) {
@@ -56,26 +66,37 @@ class WeatherProvider extends ChangeNotifier {
     }
 
     //getCityData();//updating city variable
-    final WeatherData weather;
+    WeatherData weather;
     String vCity;
     try {
       (weather,vCity) = await repository.getWeather(city: city);
       city = vCity;
       
+      currentWeatherProvider = weather;
+      await getForecastData();
+      
+      // isLoading = false;
+      // notifyListeners();
+      
     } catch (e) {
+      hasError = true;
+      errorMessage = e is APIException ? e.message : e.toString();
       if (kDebugMode) {
-        print("Exeption found attempting to get weather from provider class");
+        print("Exeption ($errorMessage) attempting to get weather from provider class");
       }
+      
+      
+      //errorMessage = e.message;
+      hourlyWeatherProvider = null;
       isLoading = false;
-      rethrow;
-
+      notifyListeners();
+      //rethrow;
     }
 
      
     //print(weather.weatherInfo);
     //TODO set the weather and fetch forecast after
-    currentWeatherProvider = weather;
-    await getForecastData();
+
     //isLoading = false;
     
 

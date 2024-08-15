@@ -19,6 +19,9 @@ class ForecastWidget extends StatelessWidget {
             ),
         builder: (context, data, _) {
           if (data.forecastData != null) {
+            if(data.forecastData!.forecast.isEmpty){
+                return const Center(child: Text("No forecast data found",style: TextStyle(color: Colors.white),));
+            }
             if (data.isLoading == true) {
               return const CircularProgressIndicator(
                 color: Colors.white,
