@@ -34,7 +34,7 @@ class ForecastWidget extends StatelessWidget {
               return Container(
                   //color: Colors.amber,
                   //height: MediaQuery.of(context).size.height*0.2,
-                  //width: MediaQuery.of(context).size.width,
+                  width:MediaQuery.of(context).size.width - MediaQuery.of(context).padding.left - MediaQuery.of(context).padding.right,
                   child: Center(
                       child: Row(
                 //mainAxisSize: MainAxisSize.max,
