@@ -65,14 +65,7 @@ void main(){
     }, iconUrl: "https://openweathermap.org/img/wn/01d.png");
 
     test("Testing that WeatherData Class correctly extracts data from JSON parameter", (){
-      //print("testing WeatherData Class");
         WeatherData sut = WeatherData.fromJson(mockedJson);
-      // print(sut.temp.defaultTemperature);
-      // print(sut.minTemp.celsius);
-      // print(sut.maxTemp.farenheight);
-      // print(sut.weatherInfo);
-      // print(sut.iconUrl);
-      
         expect(sut.temp.defaultTemperature, matcher.temp.defaultTemperature);
         expect(sut.minTemp.celsius, matcher.minTemp.celsius);
         expect(sut.maxTemp.farenheight, matcher.maxTemp.farenheight);

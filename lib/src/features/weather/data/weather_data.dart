@@ -6,16 +6,7 @@ class WeatherData {
   final Temperature maxTemp;
   final String iconUrl;
   final Map<String, dynamic> weatherInfo;
-
-  // "weather": [
-  // {
-  //   "id": 500,
-  //   "main":"Rain",
-  //   "description": "light rain",
-  //   "icon": "10n"
-  // }
-  // ],
-
+  
   WeatherData(
       {required this.dtCurrent,
       required this.dtSunset,
@@ -26,8 +17,6 @@ class WeatherData {
       required this.iconUrl});
 
   factory WeatherData.fromJson(Map<String, dynamic> json) {
-    // double currTime = json["list"]["dt"];
-    // double sunsetTime = json["list"]["sunset"];
     double safeConvert(dynamic value) {
       if (value is int) {
         return value.toDouble();

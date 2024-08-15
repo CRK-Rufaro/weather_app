@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:open_weather_example_flutter/src/api/api_keys.dart';
 import 'package:open_weather_example_flutter/src/features/weather/application/providers.dart';

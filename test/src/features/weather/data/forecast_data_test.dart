@@ -222,14 +222,6 @@ test("Testing that the 3 hour interval Weather Data is correctly extracted and u
 ForecastData sut = ForecastData.fromJson(mockedJson);
 assert(sut.forecast.length == matcher.forecast.length); //"Test and Mock Lists must be equal in length");
 for (int i = 0; i<matcher.forecast.length; i++){
-  //print("Current comparison");
-  //print("${sut.forecast.elementAt(i)}"+" vs "+ "${matcher.forecast.elementAt(i)}");
-  // print(sut.forecast.elementAt(i).temp.defaultTemperature);
-  // print(sut.forecast.elementAt(i).minTemp.celsius);
-  // print(sut.forecast.elementAt(i).maxTemp.farenheight);
-  // print(sut.forecast.elementAt(i).weatherInfo);
-  // print(sut.forecast.elementAt(i).iconUrl);
-  //expect(sut.forecast.elementAt(i), matcher.forecast.elementAt(i));
   expect(sut.forecast.elementAt(i).temp.defaultTemperature, matcher.forecast.elementAt(i).temp.defaultTemperature);
   expect(sut.forecast.elementAt(i).minTemp.celsius, matcher.forecast.elementAt(i).minTemp.celsius);
   expect(sut.forecast.elementAt(i).maxTemp.farenheight, matcher.forecast.elementAt(i).maxTemp.farenheight);

@@ -29,25 +29,16 @@ class CurrentWeather extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
-                    //color: Colors.black,
-                    child: Text(data.city, style: Theme.of(context).textTheme.headlineMedium)),
+                  Text(data.city, style: Theme.of(context).textTheme.headlineMedium),
                     
                   //TODO account for null, errors and loading states
-                  //if data.$2!=null{}
-                  Container(
-                    //color: Colors.amber,
-                    child: CurrentWeatherContents(data: data.weatherData!)),
+                  CurrentWeatherContents(data: data.weatherData!),
                 ],
               ),
             );}
             }
             //Immediately Loads into London Search Results
             return const CircularProgressIndicator(color: Colors.white,);
-            
-            //Loads into Welcome Screen and then London Search Results
-            //return Text("Welcome",style: Theme.of(context).textTheme.displayMedium);
-            
           }),
     );
   }

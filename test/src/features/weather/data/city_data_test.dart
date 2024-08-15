@@ -269,12 +269,7 @@ void main(){
   CityData matcher = CityData(name: "London", latitude: 51.5073219, longitude: -0.1276474, country: "GB");
 
   test("Testing that CityData correctly extracts data from JSON parameter", (){
-  //print("testing CityData Class");
   CityData sut = CityData.fromJson(mockedJson);
-  // print("City Name: ${sut.name}");
-  // print("City latitude: ${sut.latitude}");
-  // print("City longitude: ${sut.longitude}");
-  // print("City Country: ${sut.country}");
   expect(sut.name, matcher.name);
   expect(sut.latitude, matcher.latitude);
   expect(sut.longitude, matcher.longitude);

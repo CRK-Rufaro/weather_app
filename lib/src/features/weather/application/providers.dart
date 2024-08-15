@@ -16,16 +16,8 @@ class WeatherProvider extends ChangeNotifier {
     geoApi: GeocodingAPI(sl<String>(instanceName: 'api_key'))
   );
 
-  // initState()async {
-  //   currentCityData = await repository.getCity(city: city);
-  // }
-
 
   String city = 'London'; 
-
-  //// edited directly from search box
-  //CityData? currentCityData;
-
 
   
   
@@ -46,26 +38,14 @@ class WeatherProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  
 
-  // Future<void> getCityData() async{
-  //   final cityData = await repository.getCity(city: city);
-  //   currentCityData = cityData;
-  // }
 
   Future<void> getWeatherData() async {
-    if (kDebugMode) {
-      print("attempting to get weather");
-      print("Value of city is : $city");
-    }
+
     resetError();   
     isLoading = true;
     notifyListeners();
-    if (kDebugMode) {
-      print("Notified listeners");
-    }
 
-    //getCityData();//updating city variable
     WeatherData weather;
     String vCity;
     try {
@@ -74,37 +54,29 @@ class WeatherProvider extends ChangeNotifier {
       
       currentWeatherProvider = weather;
       await getForecastData();
-      
-      // isLoading = false;
-      // notifyListeners();
+    
       
     } catch (e) {
       hasError = true;
       errorMessage = e is APIException ? e.message : e.toString();
-      if (kDebugMode) {
-        print("Exeption ($errorMessage) attempting to get weather from provider class");
-      }
       
       
-      //errorMessage = e.message;
+
       hourlyWeatherProvider = null;
       isLoading = false;
       notifyListeners();
-      //rethrow;
+
     }
 
      
-    //print(weather.weatherInfo);
+
     //TODO set the weather and fetch forecast after
 
-    //isLoading = false;
-    
 
   }
 
   Future<void> getForecastData() async {
-    // print("Attemping to get forecast");
-    // print("Value of city is: ${city}");
+
     final ForecastData forecast;
     try {
       forecast = await repository.getForecast(city: city);
@@ -117,9 +89,6 @@ class WeatherProvider extends ChangeNotifier {
     //TODO set the forecast
     hourlyWeatherProvider = forecast;
     
-    if (kDebugMode) {
-      print("Forecast Successfully fetched");
-    }
     
     isLoading = false;
     notifyListeners();

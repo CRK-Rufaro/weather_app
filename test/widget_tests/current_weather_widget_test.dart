@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:open_weather_example_flutter/src/api/api_keys.dart';
 import 'package:open_weather_example_flutter/src/features/weather/application/providers.dart';
 import 'package:open_weather_example_flutter/src/features/weather/data/weather_data.dart';
 import 'package:open_weather_example_flutter/src/features/weather/presentation/current_weather.dart';
@@ -16,12 +14,10 @@ void main() {
       final GetIt getIt = GetIt.instance;
       getIt.registerSingleton<String>('your_api_key_here',
           instanceName: 'api_key');
-
       GetIt.instance.reset();
-      // Create a mock WeatherProvider
 
       final weatherProvider = WeatherProvider();
-      weatherProvider.isLoading = true; // Set loading state
+      weatherProvider.isLoading = true; 
 
       await tester.pumpWidget(
         MultiProvider(
@@ -47,12 +43,12 @@ void main() {
     // Test when data is loaded
     testWidgets('displays weather data when loaded',
         (WidgetTester tester) async {
-                final GetIt getIt = GetIt.instance;
+      final GetIt getIt = GetIt.instance;
       getIt.registerSingleton<String>('your_api_key_here',
           instanceName: 'api_key');
-          GetIt.instance.reset();
-      // Create a mock WeatherProvider with data
+      GetIt.instance.reset();
 
+      // Mock WeatherProvider with data
       final weatherProvider = WeatherProvider();
       weatherProvider.city = "Test City";
       weatherProvider.isLoading = false; // Set not loading
@@ -89,19 +85,18 @@ void main() {
         ),
       );
 
-      // Verify the weather data is displayed
+      // Verify data is displayed
       expect(find.text('Test City'), findsOneWidget);
-      expect(find.text('296'), findsOneWidget); // Check temperature
-      expect(find.text('H:297° L:296°'), findsOneWidget); // Check high and low
+      expect(find.text('296'), findsOneWidget); 
+      expect(find.text('H:297° L:296°'), findsOneWidget); 
     });
 
     group('displays error messages', () {
       testWidgets('City not found', (WidgetTester tester) async {
-              final GetIt getIt = GetIt.instance;
-      getIt.registerSingleton<String>('your_api_key_here',
-          instanceName: 'api_key');
-          GetIt.instance.reset();
-        // Create a mock WeatherProvider with data
+        final GetIt getIt = GetIt.instance;
+        getIt.registerSingleton<String>('your_api_key_here',
+            instanceName: 'api_key');
+        GetIt.instance.reset();
 
         final weatherProvider = WeatherProvider();
         weatherProvider.hasError = true;
@@ -124,11 +119,9 @@ void main() {
           ),
         );
 
-        // Verify the weather data is displayed
+
         expect(find.text('City not found'), findsOneWidget);
       });
-
-      // You can add more tests here for different scenarios, like handling errors or switching between Celsius and Fahrenheit.
     });
   });
 }

@@ -104,18 +104,6 @@ const encodedCityJsonResponse = """
     }
 ]
 """;
-// final expectedWeatherFromJson = Weather(
-//   weatherParams: WeatherParams(temp: 282.55, tempMin: 280.37, tempMax: 284.26),
-//   weatherInfo: [
-//     WeatherInfo(
-//       description: 'clear sky',
-//       icon: '01d',
-//       main: 'Clear',
-//     )
-//   ],
-//   dt: 1560350645,
-// );
-
 //Expected Weather data to be parsed from the JSON Response, Used for matching
 final expectedWeatherFromJson = WeatherData(
     dtSunset:
@@ -161,14 +149,11 @@ void main() {
       when(() => mockHttpClient.get(any(that: isA<Uri>())))
           .thenAnswer((invocation) async {
         final uri = invocation.positionalArguments[0] as Uri;
-        //print("providing mock response");
-        //print("the current uri path:"+ uri.path.toString());
-
         if (uri.path.contains('direct')) {
-          //print("retruned mock response for geolocater");
+
           return Response(encodedCityJsonResponse, 200);
         }
-        //print("retruned mock response for weather");
+
         return Response(encodedWeatherJsonResponse, 200);
       });
 
@@ -288,11 +273,6 @@ void main() {
 
     final forecastData = ForecastData(forecast: weatherDataList);
 
-    // mockWeatherRepository = HttpWeatherRepository(
-    //   api: mockOpenWeatherMapAPI,
-    //   client: mockClient,
-    //   geoApi: mockGeocodingAPI,
-    // );
 
     setUp(() {
       getIt.registerSingleton<String>('test_api_key', instanceName: 'api_key');
@@ -314,7 +294,6 @@ void main() {
 
       weatherProvider.city = "Mountain View";
       await weatherProvider.getWeatherData();
-      //await weatherProvider.getForecastData();
 
       expect(weatherProvider.currentWeatherProvider, weatherData);
       expect(weatherProvider.hourlyWeatherProvider, forecastData);

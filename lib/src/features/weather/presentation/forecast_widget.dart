@@ -35,31 +35,16 @@ class ForecastWidget extends StatelessWidget {
                 forecastListWidgets
                     .add(SingularTimeStepForecastWidget(timeStep: element));
               }
-              //List<SingularTimeStepForecastWidget> forecastListWidgets = forecastList.map((toElement)=>SingularTimeStepForecastWidget(timeStep: toElement))as List<SingularTimeStepForecastWidget>;
               return SafeArea(
-                child: Container(
-                    //color: Colors.amber,
-                    //height: MediaQuery.of(context).size.height*0.2,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: forecastListWidgets,
-                    )),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: forecastListWidgets,
+                ),
               );
-              // return Column(
-              //   crossAxisAlignment: CrossAxisAlignment.center,
-              //   children: [
-              //     // Text(data.city,
-              //     //     style: Theme.of(context).textTheme.headlineMedium),
-
-              //     //CurrentWeatherContents(data: data.weatherData!),
-              //   ],
-              // );
             }
           }
-          //return const CircularProgressIndicator();
           return const SizedBox();
-          //Text("Start searching for city",style: Theme.of(context).textTheme.headlineMedium);
         });
   }
 }
@@ -67,8 +52,6 @@ class ForecastWidget extends StatelessWidget {
 List<WeatherData> processedTimeSteps(List<WeatherData> rawTimeSteps) {
   List<WeatherData> trimmedTimeSteps = [];
   List presentDays = [];
-  // presentDays.add(rawTimeSteps.first.dtCurrent.weekday);
-  // trimmedTimeSteps.add(rawTimeSteps.first);
   for (var element in rawTimeSteps) {
     if (presentDays.length < 5) {
       if (!presentDays.contains(element.dtCurrent.weekday)) {
@@ -77,10 +60,6 @@ List<WeatherData> processedTimeSteps(List<WeatherData> rawTimeSteps) {
       }
     }
   }
-
-  // rawTimeSteps.forEach((element) {
-
-  // });
   return trimmedTimeSteps;
 }
 
@@ -105,25 +84,6 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
         MediaQuery.of(context).padding.left -
         MediaQuery.of(context).padding.right;
 
-    bool resize() {
-      if (MediaQuery.of(context).orientation == Orientation.landscape) {
-        if (MediaQuery.of(context).size.width >
-            MediaQuery.of(context).size.height * 2) {
-          return true;
-        }
-        return false;
-      }
-
-      return false;
-    }
-
-    // Calculate sizes based on screen width
-    double iconSize = resize()
-        ? screenHeight * 0.18
-        : screenWidth * 0.18; // 20% of screen width
-    double fontSize = resize()
-        ? screenHeight * 0.05
-        : screenWidth * 0.05; // 4.5% of screen width or height
     List<String> daysOfWeek = [
       'Monday',
       'Tuesday',
@@ -138,52 +98,42 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
         ? timeStep.temp.celsius.round()
         : timeStep.temp.farenheight.round();
 
-    return Container(
+    return SizedBox(
       //color: Colors.cyan,
       width: screenWidth / 6,
 
       child: Column(
-        //mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           //day
           Expanded(
             flex: 1,
-            child: Container(
-                //alignment: Alignment.center,
-                //color: Colors.blueGrey,
-                child: FittedBox(
-              fit: BoxFit.contain,
-              child: Text(
-                dayName,
-                style: TextStyle(color: Colors.white70, fontSize: fontSize),
-              ),
-            )),
+            child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+            dayName,
+            style: const TextStyle(color: Colors.white70, fontSize: 10),
+                          ),
+                        ),
           ),
           //icon
           Expanded(
             flex: 3,
             child: FittedBox(
               fit: BoxFit.contain,
-              child: Container(
-                  //color: Colors.black,
-                  //padding: const EdgeInsets.symmetric(horizontal: 2),
-                  child: WeatherIconImage(
-                      iconUrl: timeStep.iconUrl, size: iconSize)),
+              child: WeatherIconImage(
+                  iconUrl: timeStep.iconUrl, size: 120),
             ),
           ),
           //temperature
           Expanded(
             flex: 1,
-            child: Container(
-              //color: Colors.red,
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Text(
-                  " $temp°",
-                  style: TextStyle(fontSize: fontSize * 0.9),
-                ),
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Text(
+                " $temp°",
+                style: const TextStyle(fontSize: 10 * 0.9),
               ),
             ),
           ),

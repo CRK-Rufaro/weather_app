@@ -6,9 +6,7 @@ class ForecastData {
   ForecastData({required this.forecast});
 
   factory ForecastData.fromJson (Map<String,dynamic> json){
-    // double currTime = json["list"]["dt"];
-    // double sunsetTime = json["list"]["sunset"];
-    //print(json["list"] as List);
+
       double safeConvert(dynamic value) {
         if (value is int) {
           return value.toDouble();

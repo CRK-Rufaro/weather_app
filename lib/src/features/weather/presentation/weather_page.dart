@@ -16,13 +16,10 @@ class WeatherPage extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        //resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
           child: Container(
             height: height,
             width: width,
-                
-            //width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -41,29 +38,25 @@ class WeatherPage extends StatelessWidget {
                   //color: Colors.deepPurpleAccent,
                   height: height*0.4,
                   width: width,
-                  child: CurrentWeather()),
+                  child: const CurrentWeather()),
                 
                 Container(
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width - MediaQuery.of(context).padding.left - MediaQuery.of(context).padding.right,
                   //color: Colors.brown,
                   height: height*0.25,
-                  child: ForecastWidget()),
+                  child: const ForecastWidget()),
                 //Spacer(),
                 Container(
-                  //height: MediaQuery.of(context).size.height*0.07,
-                  //padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
                   //color: Colors.lime,
                   alignment: Alignment.bottomRight,
-                  child: ConvertCelsiusFahrenheit()),
+                  child: const ConvertCelsiusFahrenheit()),
                 //Spacer(),
                 Expanded(
                   child: Container(
                     //color: Colors.amber,
                     alignment: Alignment.center,
-                    //padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    //height: MediaQuery.of(context).size.height*0.18,
-                    child: CitySearchBox()),
+                    child: const CitySearchBox()),
                 ),
                   //const Spacer(),
                 
