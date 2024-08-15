@@ -20,7 +20,9 @@ class ForecastWidget extends StatelessWidget {
         builder: (context, data, _) {
           if (data.forecastData != null) {
             if (data.isLoading == true) {
-              return const CircularProgressIndicator();
+              return const CircularProgressIndicator(
+                color: Colors.white,
+              );
             }
             if (data.isLoading == false) {
               List<WeatherData> forecastList =
@@ -34,22 +36,14 @@ class ForecastWidget extends StatelessWidget {
               return Container(
                   //color: Colors.amber,
                   //height: MediaQuery.of(context).size.height*0.2,
-                  width:MediaQuery.of(context).size.width - MediaQuery.of(context).padding.left - MediaQuery.of(context).padding.right,
-                  child: Center(
-                      child: Row(
-                //mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: forecastListWidgets,
-              )
-                      // ListView.builder(
-
-                      //     itemCount: forecastList.length,
-                      //     scrollDirection: Axis.horizontal,
-                      //     itemBuilder: (context, index) {
-                      //       return SingularTimeStepForecastWidget(
-                      //           timeStep: forecastList[index]);
-                      //     }),
-                      ));
+                  width: MediaQuery.of(context).size.width -
+                      MediaQuery.of(context).padding.left -
+                      MediaQuery.of(context).padding.right,
+                  child: Row(
+                    //mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: forecastListWidgets,
+                  ));
               // return Column(
               //   crossAxisAlignment: CrossAxisAlignment.center,
               //   children: [
@@ -97,12 +91,17 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CelsiusOrFarenheit currentState = Provider.of<CelsiusOrFarenheitProvider>(context).currentState;
+    CelsiusOrFarenheit currentState =
+        Provider.of<CelsiusOrFarenheitProvider>(context).currentState;
     bool isCelsius = currentState == CelsiusOrFarenheit.celsius;
 
     // Get screen width
-    double screenHeight = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.bottom - MediaQuery.of(context).padding.top;
-    double screenWidth = MediaQuery.of(context).size.width - MediaQuery.of(context).padding.left - MediaQuery.of(context).padding.right;
+    double screenHeight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.bottom -
+        MediaQuery.of(context).padding.top;
+    double screenWidth = MediaQuery.of(context).size.width -
+        MediaQuery.of(context).padding.left -
+        MediaQuery.of(context).padding.right;
 
     bool resize() {
       if (MediaQuery.of(context).orientation == Orientation.landscape) {
@@ -133,11 +132,13 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
       'Sunday'
     ];
     String dayName = daysOfWeek[timeStep.dtCurrent.weekday - 1].substring(0, 3);
-    int temp = isCelsius?timeStep.temp.celsius.round():timeStep.temp.farenheight.round();
+    int temp = isCelsius
+        ? timeStep.temp.celsius.round()
+        : timeStep.temp.farenheight.round();
 
     return Container(
       //color: Colors.cyan,
-      width: screenWidth/5,
+      width: screenWidth / 5,
 
       child: Column(
         //mainAxisSize: MainAxisSize.min,
@@ -151,19 +152,18 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
                 //alignment: Alignment.center,
                 //color: Colors.blueGrey,
                 child: FittedBox(
-                  fit: BoxFit.contain,
-                  child: Text(
-                    dayName,
-                    style: TextStyle(color: Colors.white70, fontSize: fontSize),
-                  ),
-                )),
+              fit: BoxFit.contain,
+              child: Text(
+                dayName,
+                style: TextStyle(color: Colors.white70, fontSize: fontSize),
+              ),
+            )),
           ),
           //icon
           Expanded(
             flex: 3,
             child: FittedBox(
-                  fit: BoxFit.contain,
-
+              fit: BoxFit.contain,
               child: Container(
                   //color: Colors.black,
                   //padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -177,7 +177,7 @@ class SingularTimeStepForecastWidget extends StatelessWidget {
             child: Container(
               //color: Colors.red,
               child: FittedBox(
-                    fit: BoxFit.contain,
+                fit: BoxFit.contain,
                 child: Text(
                   " $temp°",
                   style: TextStyle(fontSize: fontSize * 0.9),

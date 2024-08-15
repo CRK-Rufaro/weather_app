@@ -45,6 +45,7 @@ class WeatherPage extends StatelessWidget {
                 
                 Container(
                   alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width - MediaQuery.of(context).padding.left - MediaQuery.of(context).padding.right,
                   //color: Colors.brown,
                   height: height*0.25,
                   child: ForecastWidget()),
